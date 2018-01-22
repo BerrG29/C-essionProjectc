@@ -1,20 +1,17 @@
 CC = cc
 CFLAGS = -g 
 RM = rm -f
-all: test basic bourrin
+all: interface reseau traitement
 
-basic:
+interface:
     $(CC) -o forceMe forceMe.c $(CFLAGS) -lcrypto -lssl
 
-bourrin:
+reseau:
     $(CC) -o jackTheBourrin jackTheBourrin.c $(CFLAGS) -lcrypto -lssl
 
-test:
+traitement:
     $(CC) -o test test.c $(CFLAGS) -lcrypto -lssl
 
 clean:
     $(RM) ./forceMe
-    $(RM) ./jackTheBourrin
-    $(RM) ./dictionary
-    $(RM) ./test
 
