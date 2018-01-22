@@ -11,7 +11,7 @@ int comptage(char **matrice, char target, int indexLigne, int indexCol, int nbLi
 
     int i,j;
 
-    printf("Index de fin %d, %d\n",indexFinLig,indexFinCol);
+    /*printf("Index de fin %d, %d\n",indexFinLig,indexFinCol);*/
 
     //printf("Carac %c\n",target);
 
@@ -36,7 +36,7 @@ int comptage(char **matrice, char target, int indexLigne, int indexCol, int nbLi
 
     if(target == matrice[indexLigne][indexCol]){compteur--;}
 
-    printf("Compteur pour target : %c = %d\n",target,compteur);
+    /*printf("Compteur pour target : %c = %d\n",target,compteur);*/
 
     return compteur;
 }
