@@ -20,86 +20,13 @@ int main(int argc, char *argv[])
     char **matrice;
     char **matrice_tmp;
 
-    //matrice = allouerMemoireMemoire(nbLigne,nbColonne);
-    //matrice = (char **) malloc(nbLigne * sizeof(char *));
-    //matrice = (char **) calloc(4, sizeof(char *));
-
-    //matrice_tmp = allouerMemoireMemoire(nbLigne,nbColonne);
-    //matrice_tmp = (char **) malloc(nbLigne * sizeof(char *));
-
-    /*for(i=0; i<nbLigne; i++)
-    {
-        matrice[i] = (char*) malloc(nbColonne * sizeof(char));
-        matrice_tmp[i] = (char*) malloc(nbColonne * sizeof(char));
-        //matrice[i] = (char*) calloc(4,sizeof(char));
-    }*/
-
     // TRAITEMENT 
 
     // Écriture 
 
-    /*
-    for(i=0; i<4; i++)
-    {
-        for(j=0; j<4; j++)
-        {
-            //TODO: Depuis la matrice envoyé par l'utilisateur
-            matrice[i][j] = 0;
-        }
-    }*/
-
     matrice = initMatriceDeTest();
     matrice_tmp = initMatriceDeTest();
 
-    /*
-
-    // matrice[0] = "XXXX";
-    // matrice[1] = "XX0X";
-    // matrice[2] = "XXXX";
-    // matrice[3] = "XAXX";
-
-    matrice[0][0] = 'X';
-    matrice[0][1] = 'X';
-    matrice[0][2] = 'X';
-    matrice[0][3] = 'X';
-
-    matrice[1][0] = 'X';
-    matrice[1][1] = 'X';
-    matrice[1][2] = 'O';
-    matrice[1][3] = 'X';
-
-    matrice[2][0] = 'X';
-    matrice[2][1] = 'X';
-    matrice[2][2] = 'X';
-    matrice[2][3] = 'X';
-
-    matrice[3][0] = 'X';
-    matrice[3][1] = 'A';
-    matrice[3][2] = 'X';
-    matrice[3][3] = 'X';
-
-    matrice_tmp[0][0] = 'X';
-    matrice_tmp[0][1] = 'X';
-    matrice_tmp[0][2] = 'X';
-    matrice_tmp[0][3] = 'X';
-
-    matrice_tmp[1][0] = 'X';
-    matrice_tmp[1][1] = 'X';
-    matrice_tmp[1][2] = 'O';
-    matrice_tmp[1][3] = 'X';
-
-    matrice_tmp[2][0] = 'X';
-    matrice_tmp[2][1] = 'X';
-    matrice_tmp[2][2] = 'X';
-    matrice_tmp[2][3] = 'X';
-
-    matrice_tmp[3][0] = 'X';
-    matrice_tmp[3][1] = 'A';
-    matrice_tmp[3][2] = 'X';
-    matrice_tmp[3][3] = 'X';
-
-    */
-    
     // Affichage matrice
 
     printf(" --- Affichage matrice");
@@ -119,13 +46,6 @@ int main(int argc, char *argv[])
     int nbConditions = 3,nbCaracteres = 11;
 
     regles = allouerMemoireMemoire(nbConditions,nbCaracteres);
-    /*
-    regles = (char **) malloc(nbConditions * sizeof(char *));
-
-    for(i = 0; i < nbConditions; i++){
-        regles[i] = (char *) malloc(nbCaracteres * sizeof(char));
-    }
-    */
 
     // Initialisation des regles
     regles[0] = "fdsfsdf";
@@ -133,7 +53,6 @@ int main(int argc, char *argv[])
     
 /*    printf("Condition 1 : '%s'\n",regles[0]);
     printf("Condition 1 - 2 : '%c'\n",regles[0][1]);*/
-
 
     regles[0] = "X-1O1O";  
     regles[1] = "0=8X1X";
@@ -151,8 +70,6 @@ int main(int argc, char *argv[])
     printf("Op logique : %s\n",opLogique);
     printf("Target : %c\n",target);
     printf("Res : %c\n",res);
-
-
 
     int *cpt;
     int nb_condi;
@@ -222,17 +139,6 @@ int main(int argc, char *argv[])
 
     desallouerMemoireMatrice(matrice,nbLigne);
     desallouerMemoireMatrice(matrice_tmp,nbLigne);
-
-    /*
-    for(i=0; i<4; i++)
-    {
-        free(matrice[i]);
-        //free(matrice_tmp[i]);
-    }
-
-    free(matrice);
-    //free(matrice_tmp);
-    */
 
     return 0;
 }
