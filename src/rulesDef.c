@@ -26,7 +26,6 @@ char **rules(int *nbRules) {
 	 cpt=1;
          printf("Entrer un caractère :\n");
          scanf(" %c",&rules[ligne][colonne]);
-	 printf("%c",rules[ligne][colonne]);
 	 while(rules[ligne][colonne]=='\n'){
  		printf("Ce caractère est interdit. Entrer un caractère?\n");
 		scanf(" %c",&rules[ligne][colonne]);

@@ -57,8 +57,8 @@ int main(int argc, char *argv[])
 /*    printf("Condition 1 : '%s'\n",regles[0]);
     printf("Condition 1 - 2 : '%c'\n",regles[0][1]);*/
 
-    //int nbConditions = 3,nbCaracteres = 11;
-    //regles = allouerMemoireMatrice(nbConditions,nbCaracteres);
+    // int nbConditions = 3,nbCaracteres = 11;
+    // regles = allouerMemoireMatrice(nbConditions,nbCaracteres);
     // regles[0] = "X-1O1O";  
     // regles[1] = "0=8X1X";
     // regles[2] = "A-1X1&-1O1X";
@@ -101,10 +101,13 @@ int main(int argc, char *argv[])
 	{
 		iteration(matrice,matrice_tmp,nbLigne,nbColonne,regles,3);
 
+
 		//matrice = matrice_tmp;
 		//TODO : Desallouer la mémoire de la matrice avant de copier les valeurs de la matrice temp.
 		//desallouerMemoireMatrice(matrice,nbLigne);
 		matrice = copierMatrice(matrice_tmp,nbLigne,nbColonne);
+
+        // TODO
 
 		printf("\ntemps %d\n\n",f );
 

@@ -36,7 +36,7 @@ char *readFile(char *path, int n) {
     strcpy(content, "");
     char *line = NULL;
     size_t len = 0;
-    ssize_t read;
+    size_t read;
 
     int table_id = 0;
     int counter = 0; // to check if it's the next table
