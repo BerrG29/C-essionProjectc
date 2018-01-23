@@ -255,3 +255,135 @@ int getNBConditions(char *regle){
 
     return nbCondition;
 }
+
+void iteration(char** matriceDeDonnees, char** matriceTemp, int nbLigne, int nbColonne, char **regles, int nbRegles)
+{
+	// char **conditions;
+	char *operateur;
+	char target;
+	// char resultat;
+	
+	int *cpt;
+
+	int nb_condi;
+	int premiere_condi,deuxieme_condi;
+
+	for(int l=nbRegles - 1; l>=0;l--)
+	{
+		target = getTarget(regles[l]);
+		// conditions = getConditions(regles[l]);
+		// resultat = getResult(regles[l]);
+		operateur = getOperateursLogiqueLiaison(regles[l]);
+		nb_condi = getNBConditions(regles[l]);
+
+		for(int i = 0;i< nbLigne;i++)
+		{
+			for(int j=0; j<nbColonne ; j++)
+			{
+				premiere_condi = 0;
+				deuxieme_condi = 0;
+
+				if(matriceDeDonnees[i][j] == target)
+				{
+					cpt = (int*) malloc(nb_condi * sizeof(int));
+
+					for(int k = 0; k<nb_condi; k++)
+					{
+						cpt[k]= comptage(matriceDeDonnees,regles[l][3+k*5], i, j,nbLigne,nbColonne,atoi(&regles[l][4+k*5]));
+					}
+
+					if(nb_condi == 1)
+					{
+						if(regles[l][1] == '-' && cpt[0] >= atoi(&regles[l][2]))
+						{
+				
+							matriceTemp[i][j]=regles[l][5];
+						}
+						else if(regles[l][1] == '+' && cpt[0] <= atoi(&regles[l][2]))
+						{
+							matriceTemp[i][j]=regles[l][5];
+						}
+						else if(regles[l][1] == '0' && cpt[0] == 0)
+						{
+							matriceTemp[i][j]=regles[l][5];
+						}
+						else if(regles[l][1] == '=' && cpt[0] == atoi(&regles[l][2]))
+						{
+							
+							matriceTemp[i][j]=regles[l][5];
+						}
+					}
+					else{
+
+						/*
+						Validation deuxième condition
+						*/
+
+						if(regles[l][1] == '-' && cpt[0] >= atoi(&regles[l][2]))
+						{
+							
+							premiere_condi=1;
+						}
+						else if(regles[l][1] == '+' && cpt[0] <= atoi(&regles[l][2]))
+						{
+							
+							premiere_condi=1;
+						}
+						else if(regles[l][1] == '0' && cpt[0] == 0 )
+						{
+							
+							premiere_condi=1;
+						}
+						else if(regles[l][1] == '=' && cpt[0] == atoi(&regles[l][2]))
+						{
+							
+							premiere_condi=1;
+						}
+
+						/*
+						Validation deuxième condition
+						*/
+						
+						if(regles[l][6] == '-' && cpt[1] >= atoi(&regles[l][7]))
+						{
+							
+							deuxieme_condi=1;
+						}
+						else if(regles[l][6] == '+' && cpt[1] <= atoi(&regles[l][7]))
+						{
+							
+							deuxieme_condi=1;
+						}
+						else if(regles[l][6] == '0' && cpt[1] == 0 )
+						{
+							
+							deuxieme_condi=1;
+						}
+						else if(regles[l][6] == '=' && cpt[1] == atoi(&regles[l][7]))
+						{
+							deuxieme_condi=1;
+						}
+
+						/*
+						test sur les conditions 
+						*/
+						
+						if(operateur[0] == '&' // Si l'opérateur logique est un &
+							&& premiere_condi == 1 && deuxieme_condi == 1)
+						{
+								matriceTemp[i][j]=regles[l][10];
+						}
+						else if(operateur[0] == '|')
+						{
+							if(premiere_condi == 1 || deuxieme_condi == 1)
+							{
+								matriceTemp[i][j]=regles[l][10];
+							}
+						}
+
+					}				
+				}
+			}
+		}
+	}
+}
