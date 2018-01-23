@@ -45,12 +45,15 @@ int main(int argc, char *argv[])
     char **regles;
     int nbConditions = 3,nbCaracteres = 11;
 
-    regles = allouerMemoireMemoire(nbConditions,nbCaracteres);
+    regles = allouerMemoireMatrice(nbConditions,nbCaracteres);
 
     // Initialisation des regles
     regles[0] = "fdsfsdf";
 
-    
+    printf("\n#-----------------------#\n");
+    printf("#   Récupération règles #\n");
+    printf("#-----------------------#\n\n");
+
 /*    printf("Condition 1 : '%s'\n",regles[0]);
     printf("Condition 1 - 2 : '%c'\n",regles[0][1]);*/
 
@@ -58,15 +61,21 @@ int main(int argc, char *argv[])
     regles[1] = "0=8X1X";
     regles[2] = "A-1X1&-1O1X";
 
+    printf("\n#-----------------------#\n");
+    printf("#   Affichage différentes valeurs règles   #\n");
+    printf("#-----------------------#\n\n");
+
     // Traitement
     char *regleATest = regles[2];
 
     char **conditions = getConditions(regleATest);
-    char *opLogique = getOperateursLogique(regleATest);
+    char *opLogique = getOperateursLogiqueLiaison(regleATest);
     char target = getTarget(regleATest);
     char res = getResult(regleATest);
 
-    printf("Conditions : %s\n",conditions[0]);
+    // printf("Conditions : %s\n",conditions[0]);
+    // printf("Conditions : %s\n",conditions[1]);
+    // printf("Conditions : %s\n",conditions[2]);
     printf("Op logique : %s\n",opLogique);
     printf("Target : %c\n",target);
     printf("Res : %c\n",res);
@@ -77,6 +86,11 @@ int main(int argc, char *argv[])
     printf("\n#-----------------------#\n");
     printf("#   Début traitement    #\n");
     printf("#-----------------------#\n\n");
+
+    for(int l = 0 ; l < strlen(regles) ; l++){
+        printf("Regle[%d] = %s\n",l,regles[l]);
+    }
+
 
     for(i = 0;i< nbLigne;i++){
         for(j=0;j<nbColonne;j++){
@@ -117,7 +131,13 @@ int main(int argc, char *argv[])
             }
         }
     }
+
+    //desallouerMemoireMatrice(conditions,PARAMETRES_DANS_CONDITIONS);
+    //desallouerMemoireMatrice(regles,nbConditions);
+
     //matrice = matrice_tmp;
+    //TODO : Desallouer la mémoire de la matrice avant de copier les valeurs de la matrice temp.
+    //desallouerMemoireMatrice(matrice,nbLigne);
     matrice = copierMatrice(matrice_tmp,nbLigne,nbColonne);
 
     for(i = 0;i< nbLigne;i++){
