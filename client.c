@@ -58,12 +58,19 @@ char *client_get(char *url) {
     if (!url) {
         return NULL;
     }
+
     mg_connect_http(&mgr, ev_handler, url, NULL, NULL);
     while (s_exit_flag == 0) {
         mg_mgr_poll(&mgr, 1000);
     }
+
     mg_mgr_free(&mgr);
-    return result;
+    if (!result) {
+        return NULL;
+    }
+    char *res = strdup(result);
+    free(result);
+    return res;
 }
 
 char *client_post(char *url, char *data) {
@@ -73,32 +80,48 @@ char *client_post(char *url, char *data) {
     if (!url) {
         return NULL;
     }
-//    mg_connect_http(&mgr, ev_handler, url, NULL, (char*)data);
+
     mg_connect_http(&mgr, ev_handler, url, NULL, (char*)data);
 
     while (s_exit_flag == 0) {
         mg_mgr_poll(&mgr, 1000);
     }
+
     mg_mgr_free(&mgr);
-    return result;
+    if (!result) {
+        return NULL;
+    }
+    char *res = strdup(result);
+    strcpy(result, "");
+    free(result);
+    return res;
 }
 
 int main(int argc, char *argv[]) {
 
-    import(argv[1]);
-    printf("%s\n", result);
+    char *res = client_get(argv[1]);
+    if (res) {
+        printf("%s", res);
+    } else {
+        printf("No results\n");
+    }
+    printf("-------\n");
 
-    printf("\n-------\n");
-
+/*
     int data[5][5];
     for (int i = 0 ; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
             data[i][j] = 0x41 + i + j ;
         }
     }
-    char * tmp = convertIntArrayToChar(&data, 5, 5);
-    export(argv[1], tmp);
-    printf("%s\n", result);
-    free(result);
+    char *tmp = convertIntArrayToChar(&data, 5, 5);
+    char *res = client_post(argv[1], tmp);
+    if (res) {
+        printf("%s\n", res);
+    } else {
+        printf("No results\n");
+    }
+    free(res);
+*/
     return 0;
 }
