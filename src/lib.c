@@ -93,6 +93,20 @@ char **initMatriceDeTest(){
     return matrice;
 }
 
+char **initMatriceDeTest2(){ 
+    char ** matrice = allouerMemoireMemoire(1,6);
+    matrice[0][0] = 'O';
+    matrice[0][1] = '/';
+    matrice[0][2] = 'O';
+    matrice[0][3] = '/';
+    matrice[0][4] = 'O';
+    matrice[0][5] = 'S';
+
+
+
+    return matrice;
+}
+
 
 char getTarget(char *regle){
     return regle[0];

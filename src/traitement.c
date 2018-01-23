@@ -14,7 +14,7 @@
 
 int main(int argc, char *argv[])
 {
-    int nbLigne = 4, nbColonne = 4;
+    int nbLigne = 1, nbColonne = 6;
     int i, j, k, l;
 
     char **matrice;
@@ -24,8 +24,8 @@ int main(int argc, char *argv[])
 
     // Écriture 
 
-    matrice = initMatriceDeTest();
-    matrice_tmp = initMatriceDeTest();
+    matrice = initMatriceDeTest2();
+    matrice_tmp = initMatriceDeTest2();
 
     // Affichage matrice
 
@@ -51,10 +51,14 @@ int main(int argc, char *argv[])
     regles[0] = "fdsfsdf";
 
     
-
+/*
     regles[0] = "X-1O1O";  
     regles[1] = "O=8X1X";
-    regles[2] = "A-1X1&-1O1X";
+    regles[2] = "A-1X1&-1O1X";*/
+
+    regles[0] = "O-1/1A";  
+    regles[1] = "A05O2O";
+    regles[2] = "A+2A1$";
 
 
     int *cpt;
@@ -114,7 +118,9 @@ void iteration(){
 			                }
 			                else if(regles[l][1] == '0' && cpt[0] == 0 )
 			                {
-			                	
+			                	/*printf("rentré 0\n");
+			                	printf("charactere a remplacer = %c",regles[l][5]);
+			                	printf("normalement  = %c",regles[1][5]);*/
 			                	matrice_tmp[i][j]=regles[l][5];
 			                }
 			                else if(regles[l][1] == '=' && cpt[0] == atoi(&regles[l][2]))
@@ -210,7 +216,7 @@ int f;
 
 		// Lancement
 
-for(f=0;f<3;f++)
+for(f=0;f<10;f++)
 {
 	iteration();
 
