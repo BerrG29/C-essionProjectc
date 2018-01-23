@@ -14,7 +14,7 @@
 
 int main(int argc, char *argv[])
 {
-    int nbLigne = 1, nbColonne = 6;
+    int nbLigne = 4, nbColonne = 7;
     //int i, j, k, l;
 
     char **matrice;
@@ -24,20 +24,9 @@ int main(int argc, char *argv[])
 
     // Écriture 
 
-    matrice = initMatriceDeTest2();
-    matrice_tmp = initMatriceDeTest2();
+    matrice = initMatriceDeTest3();
+    matrice_tmp = initMatriceDeTest3();
 
-    // Affichage matrice
-
-    printf(" --- Affichage matrice  origine\n");
-    for(int i=0; i<nbLigne; i++)
-    {
-        for(int j=0; j<nbColonne; j++)
-        {
-            printf("%c",matrice_tmp[i][j]);
-        }
-        printf("\n");
-    }
     // Fin écriture
 
     // Établissement règles
@@ -61,33 +50,30 @@ int main(int argc, char *argv[])
     //regles[1] = "0=8X1X";
     //regles[2] = "A-1X1&-1O1X";
 
-	regles[0] = "O-1/1A";  
-    regles[1] = "A05O2O";
-    regles[2] = "A+2A1$";
+	// regles[0] = "O-1/1A";  
+    // regles[1] = "A05O2O";
+    // regles[2] = "A+2A1$";
 
-    printf("\n#-----------------------#\n");
-    printf("#   Affichage différentes valeurs règles   #\n");
-    printf("#-----------------------#\n\n");
+	regles[0] = "X+2A2O";  
+    regles[1] = "O-3X1X";
+    regles[2] = "A=3X1&-2O2X";
 
-    // Traitement
-    // char *regleATest = regles[2];
-
-    // char **conditions = getConditions(regleATest);
-    // char *operateur = getOperateursLogiqueLiaison(regleATest);
-    // char target = getTarget(regleATest);
-    // char resultat = getResult(regleATest);
-
-    // printf("Op logique : %s\n",operateur);
-    // printf("Target : %c\n",target);
-    // printf("Res : %c\n",resultat);
-
-
-    // int *cpt;
-    // int nb_condi;
 
     printf("\n#-----------------------#\n");
     printf("#   Début traitement    #\n");
     printf("#-----------------------#\n\n");
+
+	// Affichage matrice
+
+    printf(" --- Affichage matrice  origine\n");
+    for(int i=0; i<nbLigne; i++)
+    {
+        for(int j=0; j<nbColonne; j++)
+        {
+            printf("%c",matrice_tmp[i][j]);
+        }
+        printf("\n");
+    }
 
 
     // for(int l = 0 ; l < strlen(regles) ; l++){
@@ -133,131 +119,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
-
-// void iteration(int nbRegles)
-	// {
-	// 	for(l=nbRegles - 1; l>=0;l--)
-	// 	{
-	// 		target = getTarget(regles[l]);
-	// 		conditions = getConditions(regles[l]);
-	// 		resultat = getResult(regles[l]);
-	// 		operateur = getOperateursLogiqueLiaison(regles[l]);
-	// 		nb_condi = getNBConditions(regles[l]);
-
-	// 		for(i = 0;i< nbLigne;i++)
-	// 		{
-	// 			for(j=0; j<nbColonne ; j++)
-	// 			{
-	// 				premiere_condi = 0;
-	// 				deuxieme_condi = 0;
-
-	// 				if(matrice[i][j] == target)
-	// 				{
-	// 					cpt = (int*) malloc(nb_condi * sizeof(int));
-
-	// 					for(k = 0; k<nb_condi; k++)
-	// 					{
-	// 						cpt[k]= comptage(matrice,regles[l][3+k*5], i, j,nbLigne,nbColonne,atoi(&regles[l][4+k*5]));
-	// 					}
-
-	// 					if(nb_condi == 1)
-	// 					{
-	// 						if(regles[l][1] == '-' && cpt[0] >= atoi(&regles[l][2]))
-	// 						{
-					
-	// 							matrice_tmp[i][j]=regles[l][5];
-	// 						}
-	// 						else if(regles[l][1] == '+' && cpt[0] <= atoi(&regles[l][2]))
-	// 						{
-								
-	// 							matrice_tmp[i][j]=regles[l][5];
-	// 						}
-	// 						else if(regles[l][1] == '0' && cpt[0] == 0 )
-	// 						{
-	// 							/*printf("rentré 0\n");
-	// 							printf("charactere a remplacer = %c",regles[l][5]);
-	// 							printf("normalement  = %c",regles[1][5]);*/
-	// 							matrice_tmp[i][j]=regles[l][5];
-	// 						}
-	// 						else if(regles[l][1] == '=' && cpt[0] == atoi(&regles[l][2]))
-	// 						{
-								
-	// 							matrice_tmp[i][j]=regles[l][5];
-	// 						}
-	// 					}
-	// 					else{
-
-	// 						/*
-	// 						Validation deuxième condition
-	// 						*/
-
-	// 						if(regles[l][1] == '-' && cpt[0] >= atoi(&regles[l][2]))
-	// 						{
-								
-	// 							premiere_condi=1;
-	// 						}
-	// 						else if(regles[l][1] == '+' && cpt[0] <= atoi(&regles[l][2]))
-	// 						{
-								
-	// 							premiere_condi=1;
-	// 						}
-	// 						else if(regles[l][1] == '0' && cpt[0] == 0 )
-	// 						{
-								
-	// 							premiere_condi=1;
-	// 						}
-	// 						else if(regles[l][1] == '=' && cpt[0] == atoi(&regles[l][2]))
-	// 						{
-								
-	// 							premiere_condi=1;
-	// 						}
-
-	// 						/*
-	// 						Validation deuxième condition
-	// 						*/
-							
-	// 						if(regles[l][6] == '-' && cpt[1] >= atoi(&regles[l][7]))
-	// 						{
-								
-	// 							deuxieme_condi=1;
-	// 						}
-	// 						else if(regles[l][6] == '+' && cpt[1] <= atoi(&regles[l][7]))
-	// 						{
-								
-	// 							deuxieme_condi=1;
-	// 						}
-	// 						else if(regles[l][6] == '0' && cpt[1] == 0 )
-	// 						{
-								
-	// 							deuxieme_condi=1;
-	// 						}
-	// 						else if(regles[l][6] == '=' && cpt[1] == atoi(&regles[l][7]))
-	// 						{
-	// 							deuxieme_condi=1;
-	// 						}
-
-	// 						/*
-	// 						test sur les conditions 
-	// 						*/
-							
-	// 						if(operateur[0] == '&' // Si l'opérateur logique est un &
-	// 							&& premiere_condi == 1 && deuxieme_condi == 1)
-	// 						{
-	// 								matrice_tmp[i][j]=regles[l][10];
-	// 						}
-	// 						else if(operateur[0] == '|')
-	// 						{
-	// 							if(premiere_condi == 1 || deuxieme_condi == 1)
-	// 							{
-									
-	// 								matrice_tmp[i][j]=regles[l][10];
-	// 							}
-	// 						}
-
-	// 					}				
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }

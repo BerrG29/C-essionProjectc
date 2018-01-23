@@ -113,6 +113,43 @@ char **initMatriceDeTest2(){
     return matrice;
 }
 
+char **initMatriceDeTest3(){ 
+    char ** matrice = allouerMemoireMatrice(4,7);
+    matrice[0][0] = 'X';
+    matrice[0][1] = 'O';
+    matrice[0][2] = 'X';
+    matrice[0][3] = 'X';
+    matrice[0][4] = 'O';
+    matrice[0][5] = 'O';
+    matrice[0][6] = 'A';
+
+    matrice[1][0] = 'A';
+    matrice[1][1] = 'O';
+    matrice[1][2] = 'X';
+    matrice[1][3] = 'A';
+    matrice[1][4] = 'X';
+    matrice[1][5] = 'X';
+    matrice[1][6] = 'A';
+
+    matrice[2][0] = 'A';
+    matrice[2][1] = 'O';
+    matrice[2][2] = 'X';
+    matrice[2][3] = 'A';
+    matrice[2][4] = 'O';
+    matrice[2][5] = 'X';
+    matrice[2][6] = 'A';
+
+    matrice[3][0] = 'A';
+    matrice[3][1] = 'O';
+    matrice[3][2] = 'X';
+    matrice[3][3] = 'O';
+    matrice[3][4] = 'O';
+    matrice[3][5] = 'O';
+    matrice[3][6] = 'O';
+
+    return matrice;
+}
+
 
 
 char getTarget(char *regle){
@@ -163,24 +200,24 @@ char getLogique(char *condition){
 }
 
 /**
- * Récupérer le nombre de case autour des caractères à tester par règle. 
+ * Récupérer le nombre de caractères à compter autour des caractères à tester par règle. 
  */
-int* getNbCasesAutourDepuisCondition(char *regle){
+int* getNbCaracteresACompter(char *regle){
     int nbCondition = (int) strlen(regle)/5;
     int *casesAutour = (int *) malloc(nbCondition * sizeof(int));
     for(int i = 0; i < strlen(regle) ; i ++)
     {
-        casesAutour[i] = regle[2+i*5];
+        casesAutour[i] = atoi(&regle[2+i*5]);
     }
 
     return casesAutour;
 }
 
 /**
- * Récupérer le nombre de case autour d'un caractère par condition d'une règle. 
+ * Récupérer le nombre de caractères à compter autour d'un caractère par condition d'une règle. 
  */
-int getNbCaseAutourDepuisCondition(char *condition){
-    return condition[1];
+int getNbCaractereACompter(char *condition){
+    return atoi(&condition[1]);
 }
 
 /**
@@ -212,7 +249,7 @@ int* getDistances(char *regle){
     int *distances = (int *) malloc(nbCondition * sizeof(int));
     for(int i = 0; i < strlen(regle) ; i ++)
     {
-        distances[i] = regle[4+i*5];
+        distances[i] = atoi(&regle[4+i*5]);
     }
 
     return distances;
@@ -221,8 +258,8 @@ int* getDistances(char *regle){
 /**
  * Récupérer la distance d'un caractère à tester par condition d'une règle.
  */
-char getDistance(char *condition){
-    return condition[3];
+int getDistance(char *condition){
+    return atoi(&condition[3]);
 }
 
 char *getOperateursLogiqueLiaison(char *regle){
@@ -258,21 +295,25 @@ int getNBConditions(char *regle){
 
 void iteration(char** matriceDeDonnees, char** matriceTemp, int nbLigne, int nbColonne, char **regles, int nbRegles)
 {
-	// char **conditions;
+    // char *caracteresTest;
+	char **conditions;
 	char *operateur;
 	char target;
-	// char resultat;
+    char caractereTest;
+	char resultat;
 	
 	int *cpt;
+    int *nbCaracACompter;
 
 	int nb_condi;
 	int premiere_condi,deuxieme_condi;
+    int distance;
 
 	for(int l=nbRegles - 1; l>=0;l--)
 	{
 		target = getTarget(regles[l]);
-		// conditions = getConditions(regles[l]);
-		// resultat = getResult(regles[l]);
+		conditions = getConditions(regles[l]);
+		resultat = getResult(regles[l]);
 		operateur = getOperateursLogiqueLiaison(regles[l]);
 		nb_condi = getNBConditions(regles[l]);
 
@@ -286,45 +327,48 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int nbLigne, int nbC
 				if(matriceDeDonnees[i][j] == target)
 				{
 					cpt = (int*) malloc(nb_condi * sizeof(int));
+                    nbCaracACompter = (int*) malloc(nb_condi * sizeof(int));
 
 					for(int k = 0; k<nb_condi; k++)
 					{
-						cpt[k]= comptage(matriceDeDonnees,regles[l][3+k*5], i, j,nbLigne,nbColonne,atoi(&regles[l][4+k*5]));
+                        caractereTest = getCaractereTest(conditions[k]);
+                        distance = getDistance(conditions[k]);
+						// cpt[k]= comptage(matriceDeDonnees,regles[l][3+k*5], i, j,nbLigne,nbColonne,atoi(&regles[l][4+k*5]));
+                        cpt[k]= comptage(matriceDeDonnees,caractereTest, i, j,nbLigne,nbColonne,distance);
+                        nbCaracACompter[k] = getNbCaractereACompter(conditions[k]);
 					}
 
 					if(nb_condi == 1)
 					{
-						if(regles[l][1] == '-' && cpt[0] >= atoi(&regles[l][2]))
+						if(regles[l][1] == '-' && cpt[0] >= nbCaracACompter[0])
 						{
-				
-							matriceTemp[i][j]=regles[l][5];
+							matriceTemp[i][j]=resultat;
 						}
-						else if(regles[l][1] == '+' && cpt[0] <= atoi(&regles[l][2]))
+						else if(regles[l][1] == '+' && cpt[0] <= nbCaracACompter[0])
 						{
-							matriceTemp[i][j]=regles[l][5];
+							matriceTemp[i][j]=resultat;
 						}
 						else if(regles[l][1] == '0' && cpt[0] == 0)
 						{
-							matriceTemp[i][j]=regles[l][5];
+							matriceTemp[i][j]=resultat;
 						}
-						else if(regles[l][1] == '=' && cpt[0] == atoi(&regles[l][2]))
+						else if(regles[l][1] == '=' && cpt[0] == nbCaracACompter[0])
 						{
-							
-							matriceTemp[i][j]=regles[l][5];
+							matriceTemp[i][j]=resultat;
 						}
 					}
 					else{
 
 						/*
-						Validation deuxième condition
+						Validation premiere condition
 						*/
 
-						if(regles[l][1] == '-' && cpt[0] >= atoi(&regles[l][2]))
+						if(regles[l][1] == '-' && cpt[0] >= nbCaracACompter[0])
 						{
 							
 							premiere_condi=1;
 						}
-						else if(regles[l][1] == '+' && cpt[0] <= atoi(&regles[l][2]))
+						else if(regles[l][1] == '+' && cpt[0] <= nbCaracACompter[0])
 						{
 							
 							premiere_condi=1;
@@ -334,7 +378,7 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int nbLigne, int nbC
 							
 							premiere_condi=1;
 						}
-						else if(regles[l][1] == '=' && cpt[0] == atoi(&regles[l][2]))
+						else if(regles[l][1] == '=' && cpt[0] == nbCaracACompter[0])
 						{
 							
 							premiere_condi=1;
@@ -344,12 +388,12 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int nbLigne, int nbC
 						Validation deuxième condition
 						*/
 						
-						if(regles[l][6] == '-' && cpt[1] >= atoi(&regles[l][7]))
+						if(regles[l][6] == '-' && cpt[1] >= nbCaracACompter[1])
 						{
 							
 							deuxieme_condi=1;
 						}
-						else if(regles[l][6] == '+' && cpt[1] <= atoi(&regles[l][7]))
+						else if(regles[l][6] == '+' && cpt[1] <= nbCaracACompter[1])
 						{
 							
 							deuxieme_condi=1;
@@ -359,7 +403,7 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int nbLigne, int nbC
 							
 							deuxieme_condi=1;
 						}
-						else if(regles[l][6] == '=' && cpt[1] == atoi(&regles[l][7]))
+						else if(regles[l][6] == '=' && cpt[1] == nbCaracACompter[1])
 						{
 							deuxieme_condi=1;
 						}
@@ -371,13 +415,15 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int nbLigne, int nbC
 						if(operateur[0] == '&' // Si l'opérateur logique est un &
 							&& premiere_condi == 1 && deuxieme_condi == 1)
 						{
-								matriceTemp[i][j]=regles[l][10];
+								//matriceTemp[i][j]=regles[l][10];
+                                matriceTemp[i][j]=resultat;
 						}
 						else if(operateur[0] == '|')
 						{
 							if(premiere_condi == 1 || deuxieme_condi == 1)
 							{
-								matriceTemp[i][j]=regles[l][10];
+								// matriceTemp[i][j]=regles[l][10];
+                                matriceTemp[i][j]=resultat;
 							}
 						}
 
