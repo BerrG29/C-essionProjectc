@@ -99,6 +99,20 @@ char **initMatriceDeTest(){
     return matrice;
 }
 
+char **initMatriceDeTest2(){ 
+    char ** matrice = allouerMemoireMatrice(1,6);
+    matrice[0][0] = 'O';
+    matrice[0][1] = '/';
+    matrice[0][2] = 'O';
+    matrice[0][3] = '/';
+    matrice[0][4] = 'O';
+    matrice[0][5] = 'S';
+
+
+
+    return matrice;
+}
+
 
 
 char getTarget(char *regle){
@@ -114,7 +128,6 @@ char **getConditions(char *regle){
     char **conditions;
 
     int nbCondition = (int) strlen(regle)/5; 
-    printf("nbCondition %d\n",nbCondition);
     conditions = (char **) malloc(nbCondition * sizeof(char *));
 
     for(int i = 0; i<nbCondition; i++){
@@ -215,7 +228,7 @@ char getDistance(char *condition){
 char *getOperateursLogiqueLiaison(char *regle){
     char *opLogique;
 
-    printf("regle : %s\n",regle);
+/*    printf("regle : %s\n",regle);*/
 
     int nbCondition = (int) strlen(regle)/5;
     if(nbCondition > 1){
@@ -233,4 +246,12 @@ char *getOperateursLogiqueLiaison(char *regle){
 
 char getOperateurLogiqueLiaison(char *regle){
     return regle[6];
+}
+
+int getNBConditions(char *regle){
+
+    int nbCondition;
+    nbCondition = (int) strlen(regle)/5; 
+
+    return nbCondition;
 }
