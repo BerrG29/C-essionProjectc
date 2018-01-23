@@ -120,10 +120,18 @@ char **getConditions(char *regle){
     return conditions;
 }
 
+int getNBConditions(char *regle){
+
+    int nbCondition;
+    nbCondition = (int) strlen(regle)/5; 
+
+    return nbCondition;
+}
+
 char *getOperateursLogique(char *regle){
     char *opLogique;
 
-    printf("regle : %s\n",regle);
+/*    printf("regle : %s\n",regle);*/
 
     int nbCondition = (int) strlen(regle)/5;
     if(nbCondition > 1){

@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
     // Affichage matrice
 
-    printf(" --- Affichage matrice");
+    printf(" --- Affichage matrice  origine\n");
     for(i=0; i<nbLigne; i++)
     {
         for(j=0; j<nbColonne; j++)
@@ -59,17 +59,17 @@ int main(int argc, char *argv[])
     regles[2] = "A-1X1&-1O1X";
 
     // Traitement
-    char *regleATest = regles[2];
+   /* char *regleATest = regles[2];*/
 
-    char **conditions = getConditions(regleATest);
-    char *opLogique = getOperateursLogique(regleATest);
+    // char **conditions = getConditions(regleATest);
+ /*   char *opLogique = getOperateursLogique(regleATest);
     char target = getTarget(regleATest);
-    char res = getResult(regleATest);
+    char res = getResult(regleATest);*/
 
-    printf("Conditions : %s\n",conditions[0]);
+    /*printf("Conditions : %s\n",conditions[0]);
     printf("Op logique : %s\n",opLogique);
     printf("Target : %c\n",target);
-    printf("Res : %c\n",res);
+    printf("Res : %c\n",res);*/
 
     int *cpt;
     int nb_condi;
@@ -78,40 +78,136 @@ int main(int argc, char *argv[])
     printf("#   Début traitement    #\n");
     printf("#-----------------------#\n\n");
 
+    char target;
+    char **conditions;
+    char resultat;
+    char *operateur;
+
+    int premiere_condi;
+    int deuxieme_condi;
+
+   
+
     for(i = 0;i< nbLigne;i++){
+
         for(j=0;j<nbColonne;j++){
-            if(matrice[i][j] == regles[2][0]){
-            	nb_condi = (int) (strlen(regles[2])/5);
+
+        	target = getTarget(regles[0]);
+        	conditions = getConditions(regles[0]);
+        	resultat = getResult(regles[0]);
+        	operateur = getOperateursLogique(regles[0]);
+        	nb_condi = getNBConditions(regles[0]);
+
+        	premiere_condi = 0;
+  			deuxieme_condi = 0;
+
+            if(matrice[i][j] == target){
+
+            	
             	cpt = (int*) malloc(nb_condi * sizeof(int));
 
             	for(k = 0; k<nb_condi; k++)
                 {
-                	cpt[k]= comptage(matrice,
-	                            regles[2][3+k*5],
-	                            i, j,nbLigne,nbColonne,
-	                            atoi(&regles[2][4+k*5]));
 
-	                // printf("---------------\n");
-                	printf("%d\n",cpt[k] );
-                	if(regles[2][1+k*5] == '-' && cpt[k] >= atoi(&regles[2][2+k*5]))
-	              	{
-	                	 printf("rentré\n");
-	                	matrice_tmp[i][j]=regles[0][5+k*5];
-	                }
-	                else if(regles[2][1+k*5] == '+' && cpt[k] <= atoi(&regles[2][2+k*5]))
+                	cpt[k]= comptage(matrice,regles[0][3+k*5], i, j,nbLigne,nbColonne,atoi(&regles[0][4+k*5]));
+
+					/*printf(" k =  %d \n",k);
+                	printf(" cpt %d \n",cpt[k]);*/
+
+	                if(nb_condi == 1)
 	                {
-	                	printf("+\n");
-	                	matrice_tmp[i][j]=regles[2][5+k*5];
+	                	if(regles[0][1] == '-' && cpt[0] >= atoi(&regles[0][2]))
+		              	{
+		           
+		                	matrice_tmp[i][j]=regles[0][5];
+		                }
+		                else if(regles[0][1] == '+' && cpt[0] <= atoi(&regles[0][2]))
+		                {
+		                	
+		                	matrice_tmp[i][j]=regles[0][5];
+		                }
+		                else if(regles[0][1] == '0' && cpt[0] == 0 )
+		                {
+		                	
+		                	matrice_tmp[i][j]=regles[0][5];
+		                }
+		                else if(regles[0][1] == '=' && cpt[0] == atoi(&regles[0][2]))
+		                {
+		                	
+		                	matrice_tmp[i][j]=regles[0][5];
+		                }
 	                }
-	                else if(regles[2][1+k*5] == '0' && cpt[k] == 0 )
-	                {
-	                	printf("0\n");
-	                	matrice_tmp[i][j]=regles[2][5+k*5];
-	                }
-	                else if(regles[2][1+k*5] == '=' && cpt[k] == atoi(&regles[2][2+k*5]))
-	                {
-	                	printf("=\n");
-	                	matrice_tmp[i][j]=regles[2][5+k*5];
+	                else{
+
+	                	/*
+						Validation deuxième condition
+						*/
+
+	                	if(regles[0][1] == '-' && cpt[0] >= atoi(&regles[0][2]))
+		              	{
+		                	
+		                	premiere_condi=1;
+		                }
+		                else if(regles[0][1] == '+' && cpt[0] <= atoi(&regles[0][2]))
+		                {
+		                	
+		                	premiere_condi=1;
+		                }
+		                else if(regles[0][1] == '0' && cpt[0] == 0 )
+		                {
+		                	
+		                	premiere_condi=1;
+		                }
+		                else if(regles[0][1] == '=' && cpt[0] == atoi(&regles[0][2]))
+		                {
+		                	
+		                	premiere_condi=1;
+		                }
+
+						/*
+						Validation deuxième condition
+						*/
+
+		                if(regles[0][6] == '-' && cpt[1] >= atoi(&regles[0][7]))
+		              	{
+		                	
+		                	deuxieme_condi=1;
+		                }
+		                else if(regles[0][6] == '+' && cpt[1] <= atoi(&regles[0][7]))
+		                {
+		                	
+		                	deuxieme_condi=1;
+		                }
+		                else if(regles[0][6] == '0' && cpt[1] == 0 )
+		                {
+		                	
+		                	deuxieme_condi=1;
+		                }
+		                else if(regles[0][6] == '=' && cpt[1] == atoi(&regles[0][7]))
+		                {
+		                	
+		                	deuxieme_condi=1;
+		                }
+
+		                /*
+						test sur les conditions 
+						*/
+
+		                if(operateur == "&")
+		                {
+		                	if(premiere_condi == 1 && deuxieme_condi == 1)
+		                	{
+		                		matrice_tmp[i][j]=regles[0][10];
+		                	}
+		                }
+		                else
+		                {
+		                	if(premiere_condi == 1 || deuxieme_condi == 1)
+		                	{
+		                		matrice_tmp[i][j]=regles[0][10];
+		                	}
+		                }
+
 	                }
                 }
             }
@@ -120,17 +216,21 @@ int main(int argc, char *argv[])
     //matrice = matrice_tmp;
     matrice = copierMatrice(matrice_tmp,nbLigne,nbColonne);
 
+ 
+
+    printf("\n#-----------------------#\n");
+    printf("#    Fin traitement     #\n");
+    printf("#-----------------------#\n\n");
+
+
+	printf("\n --- Affichage matrice sortie\n");
+
     for(i = 0;i< nbLigne;i++){
         for(j=0;j<nbColonne;j++){
         	printf("%c",matrice[i][j]);
         }
         printf("\n");
     }
-
-    printf("\n#-----------------------#\n");
-    printf("#    Fin traitement     #\n");
-    printf("#-----------------------#\n\n");
-
 /*    printf("Distance %d\n",atoi(&regles[0][4]));
 
     printf("Comptage = %d\n",cpt);*/
