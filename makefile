@@ -1,4 +1,4 @@
-CC = cc --std=c99
+CC = cc
 CFLAGS = -g -W
 RM = rm -f
 all: mongoose network traitement
@@ -12,10 +12,10 @@ mongoose:
 network:
 	$(CC) -c storage.c -o ./bin/storage.o $(CFLAGS)
 	$(CC) -o ./bin/lineModule lineModule.c $(CFLAGS) ./bin/*.o
-	$(CC) -o ./bin/client client.c $(CFLAGS) ./bin/mongoose.o
+	$(CC) --std=c99 -o ./bin/client client.c $(CFLAGS) ./bin/mongoose.o
 
 traitement:
-	$(CC) $(CFLAGS)	./src/traitement.c -o ./bin/traitement
+	$(CC) --std=c99 $(CFLAGS) ./src/traitement.c -o ./bin/traitement
 
 clean:
 	$(RM) ./bin/*

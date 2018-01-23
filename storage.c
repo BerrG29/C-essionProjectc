@@ -10,8 +10,15 @@
 #define MAX_BUFSIZE 2048
 
 int writeFile(char *path, char *data) {
+
+    if (!path) {
+        return EXIT_FAILURE;
+    }
+
+    char _path[MAX_BUFSIZE];
+    snprintf(_path, MAX_BUFSIZE, "%s%s", DEFAULT_FOLDER, path);
     FILE *fo;
-    fo = fopen(path, "a");
+    fo = fopen(_path, "a");
     if(!fo) {
         return EXIT_FAILURE;
     }
@@ -21,11 +28,63 @@ int writeFile(char *path, char *data) {
     return EXIT_SUCCESS;
 };
 
+int isCyclic(char *path) {
+    if (!path) {
+        return EXIT_FAILURE;
+    }
+
+    char _path[MAX_BUFSIZE];
+    snprintf(_path, MAX_BUFSIZE, "%s%s", DEFAULT_FOLDER, path);
+
+    FILE *fo;
+    fo = fopen(_path, "r");
+    if(!fo) {
+        return EXIT_FAILURE;
+    }
+
+    char *line = NULL;
+    size_t len = 0;
+    size_t read;
+
+    char *content = malloc(sizeof(char) * MAX_BUFSIZE);
+    char *content2 = malloc(sizeof(char) * MAX_BUFSIZE);
+    if(!content || !content2) {
+        return EXIT_FAILURE;
+    }
+    strcpy(content, "");
+    strcpy(content2, "");
+    int counter = 0; // to check if it's the next table
+    while ((read = getline(&line, &len, fo)) != -1) {
+        if (!strncmp(line, "\n", MAX_BUFSIZE)) {
+            counter++;
+        } else {
+            if (counter == 2) {
+                counter = 0;
+                strcpy(content2, content);
+                strcpy(content, "");
+            }
+            strncat(content, line, MAX_BUFSIZE);
+        }
+    }
+
+    if (!strcmp(content, content2)) {
+        return 100;
+    }
+    return 101;
+}
+
+
 char *readFile(char *path, int n) {
 
-    printf("\nn:%d\n", n);
+    if (!path) {
+        return EXIT_FAILURE;
+    }
+
+    char _path[MAX_BUFSIZE];
+    snprintf(_path, MAX_BUFSIZE, "%s%s", DEFAULT_FOLDER, path);
+
     FILE *fo;
-    fo = fopen(path, "r");
+    fo = fopen(_path, "r");
     if(!fo) {
         return NULL;
     }

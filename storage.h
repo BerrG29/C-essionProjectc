@@ -5,6 +5,7 @@
 #ifndef C_ESSIONPROJECTC_STORAGE_H
 #define C_ESSIONPROJECTC_STORAGE_H
 
+#define DEFAULT_FOLDER "./data/"
 /**
  * Create or update an existing table
  * @param path file concerned
@@ -13,6 +14,12 @@
  */
 int writeFile(char *path, char *data);
 
+/**
+ *
+ * @param path
+ * @return 100 if isCyclic, 101 else. Return EXIT_FAILURE if an error happened
+ */
+int isCyclic(char *path);
 /**
  *
  * @param path file concerned

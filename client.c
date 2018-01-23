@@ -8,7 +8,7 @@
 static int s_exit_flag = 0;
 char *result = NULL;
 
-static char *convertIntArrayToChar(int *data, int x, int y) {
+static char *array2DtoArray(int x, int y, char data[x][y]) {
     char *res = malloc(sizeof(char*) * (x + 1) * y);
     if (!res) {
         return NULL;
@@ -17,7 +17,7 @@ static char *convertIntArrayToChar(int *data, int x, int y) {
     for (int i = 0; i < x; i++) {
         for (int j = 0; j < y; j++) {
             char tmp[1];
-            sprintf(tmp, "%c", data[i]);
+            sprintf(tmp, "%c", data[i][j]);
             strcat(res, tmp);
         }
         strcat(res, "\n");
@@ -64,12 +64,12 @@ char *client_get(char *url) {
         mg_mgr_poll(&mgr, 1000);
     }
 
-    mg_mgr_free(&mgr);
     if (!result) {
         return NULL;
     }
     char *res = strdup(result);
     free(result);
+    result = NULL;
     return res;
 }
 
@@ -87,41 +87,47 @@ char *client_post(char *url, char *data) {
         mg_mgr_poll(&mgr, 1000);
     }
 
-    mg_mgr_free(&mgr);
     if (!result) {
         return NULL;
     }
     char *res = strdup(result);
-    strcpy(result, "");
     free(result);
+    result = NULL;
     return res;
 }
 
 int main(int argc, char *argv[]) {
 
+    int x = 5;
+    int y = 5;
+    int counter = 0;
+    char data[5][5] = {0,};
+    for (int i = 0 ; i < x; i++) {
+        for (int j = 0; j < y; j++) {
+            data[i][j] = 0x41 + counter;
+            counter++;
+        }
+    }
+    char *tmp = array2DtoArray(x, y, data);
+    char *res2 = client_post(argv[1], tmp);
+
+    if (res2) {
+        printf("ici: %s\n", res2);
+    } else {
+        printf("No results\n");
+    }
+    free(res2);
+
+    /*
+    printf("-------\n");
     char *res = client_get(argv[1]);
     if (res) {
         printf("%s", res);
     } else {
         printf("No results\n");
     }
-    printf("-------\n");
-
-/*
-    int data[5][5];
-    for (int i = 0 ; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            data[i][j] = 0x41 + i + j ;
-        }
-    }
-    char *tmp = convertIntArrayToChar(&data, 5, 5);
-    char *res = client_post(argv[1], tmp);
-    if (res) {
-        printf("%s\n", res);
-    } else {
-        printf("No results\n");
-    }
     free(res);
 */
+
     return 0;
 }

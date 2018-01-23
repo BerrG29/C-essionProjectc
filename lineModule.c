@@ -23,13 +23,6 @@ static void mg_printf_OK(struct mg_connection *nc, char *data) {
               (int) strlen(data), data);
 }
 
-static void mg_printf_created(struct mg_connection *nc) {
-    mg_printf(nc,
-              "HTTP/1.1 201 Created\r\n"
-                      "Content-Type: text/plain\r\n"
-                      "Content-Length: 0\r\n\r\n");
-}
-
 static void mg_printf_not_implemented(struct mg_connection *nc) {
     mg_printf(nc, "%s",
               "HTTP/1.0 501 Not Implemented\r\n"
@@ -90,7 +83,10 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
                 mg_printf_not_found(nc);
             } else {
                 writeFile(uri, query);
-                mg_printf_created(nc);
+                int cyclic = isCyclic(uri);
+                char tmp[3];
+                sprintf(tmp, "%d", cyclic);
+                mg_printf_OK(nc, tmp);
                 free(query);
             }
         } else {
