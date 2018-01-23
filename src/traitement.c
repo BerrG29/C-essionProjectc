@@ -11,6 +11,7 @@
 #include <math.h>
 
 #include "lib.c"
+#include "rulesDef.c"
 
 int main(int argc, char *argv[])
 {
@@ -24,39 +25,51 @@ int main(int argc, char *argv[])
 
     // Écriture 
 
-    matrice = initMatriceDeTest3();
-    matrice_tmp = initMatriceDeTest3();
+    matrice = initMatriceDeTest();
+    matrice_tmp = initMatriceDeTest();
 
     // Fin écriture
 
     // Établissement règles
 
-    char **regles;
-    int nbConditions = 3,nbCaracteres = 11;
+    int nbRegles = 0;
 
-    regles = allouerMemoireMatrice(nbConditions,nbCaracteres);
+    char **regles;
+    
+
+    //printRes(regles);
 
     // Initialisation des regles
-    regles[0] = "fdsfsdf";
 
     printf("\n#-----------------------#\n");
     printf("#   Récupération règles #\n");
     printf("#-----------------------#\n\n");
 
+    regles = rules(&nbRegles);
+    printf("Nombre de regles %d\n",nbRegles);
+    for(int i = 0; i < nbRegles ; i ++){
+        for(int j = 0; j < strlen(regles[i]); j++){
+            printf("Regle %d = %s",i,regles[i]);
+        }
+        printf("\n");
+    }
+
 /*    printf("Condition 1 : '%s'\n",regles[0]);
     printf("Condition 1 - 2 : '%c'\n",regles[0][1]);*/
 
-    //regles[0] = "X-1O1O";  
-    //regles[1] = "0=8X1X";
-    //regles[2] = "A-1X1&-1O1X";
+    //int nbConditions = 3,nbCaracteres = 11;
+    //regles = allouerMemoireMatrice(nbConditions,nbCaracteres);
+    // regles[0] = "X-1O1O";  
+    // regles[1] = "0=8X1X";
+    // regles[2] = "A-1X1&-1O1X";
 
 	// regles[0] = "O-1/1A";  
     // regles[1] = "A05O2O";
     // regles[2] = "A+2A1$";
 
-	regles[0] = "X+2A2O";  
-    regles[1] = "O-3X1X";
-    regles[2] = "A=3X1&-2O2X";
+	// regles[0] = "X+2A2O";  
+    // regles[1] = "O-3X1X";
+    // regles[2] = "A=3X1&-2O2X";
 
 
     printf("\n#-----------------------#\n");
