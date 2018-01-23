@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 /* function returning some rules requested by a user */
-char **rule() {
+char **rules(int *nbRules) {
 
    char newRule='d';
    int nbConditions;
@@ -20,6 +20,7 @@ char **rule() {
    
    //new rule
    while(newRule!='N'){
+	   *nbRules+= 1;
 	 char term;
 	 int nb;
 	 cpt=1;
@@ -45,13 +46,13 @@ char **rule() {
 		
 		printf("S'il y a au moins(-), au plus(+), aucun(0), exactement(=) ?\n");
 		scanf(" %c",&rules[ligne][colonne]);
-		while(rules[ligne][colonne]!='-' & rules[ligne][colonne]!='+' & rules[ligne][colonne]!='0' & rules[ligne][colonne]!='='){
+		while(rules[ligne][colonne]!='-' && rules[ligne][colonne]!='+' && rules[ligne][colonne]!='0' && rules[ligne][colonne]!='='){
 	 		printf("Merci d'entrer moins(-), au plus(+), aucun(0), exactement(=)?\n");
 			scanf(" %c",&rules[ligne][colonne]);
 	 	}
 		colonne++;
 
-		if (rules[ligne][colonne-1]=='-' || rules[ligne][colonne-1]=='+'){
+		if (rules[ligne][colonne-1]=='-' || rules[ligne][colonne-1]=='+' || rules[ligne][colonne-1]=='='){
 			printf("Combien?\n");
 			while(scanf("%d%c", &nb, &term) != 2 || term != '\n'){
 	 			printf("Merci d'entrer un entier.\n");
@@ -59,6 +60,10 @@ char **rule() {
 				printf("Combien?\n");
 	 		}
 			rules[ligne][colonne]=nb+'0';
+			colonne++;
+		}
+		else{
+			rules[ligne][colonne]='0';
 			colonne++;
 		}
 		printf("Caractère de type?\n");
@@ -81,7 +86,7 @@ char **rule() {
          	if (nbConditions-cpt>=1){
 			printf("Structure logique entre les contitions? (& = ET / | = OU)\n");
 			scanf(" %c",&rules[ligne][colonne]);
-			while(rules[ligne][colonne]!='&' & rules[ligne][colonne]!='|'){
+			while(rules[ligne][colonne]!='&' && rules[ligne][colonne]!='|'){
 	 			printf("Merci d'entrer & = ET / | = OU?\n");
 				scanf(" %c",&rules[ligne][colonne]);
 	 		}
@@ -93,7 +98,7 @@ char **rule() {
 	 printf("la case devient de type? \n");
 	 scanf(" %c",&rules[ligne][colonne]);
          colonne++;
-	 rules[ligne][colonne]='\n';
+	 //rules[ligne][colonne]='\n';
 
          printf("Voulez vous entrer une autre règle (O/N)?\n");
          scanf(" %c",&newRule);
@@ -101,7 +106,7 @@ char **rule() {
 	 ligne++;
 	 colonne=0; 
    }
-   rules[ligne][colonne]='\n';
+   //rules[ligne][colonne]='\n';
 
    return rules; 
 }
@@ -122,13 +127,11 @@ void printRes(char **rules){
     }
 }
 
-
-
-int main(int argc, char *argv[])
-{
-    printRes(rule());
-    return EXIT_SUCCESS;
-}
+// int main(int argc, char *argv[])
+// {
+//     printRes(rule());
+//     return EXIT_SUCCESS;
+// }
 
 
 
