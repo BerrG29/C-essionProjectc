@@ -4,14 +4,14 @@ RM = rm -f
 all: interface reseau traitement
 
 interface:
-    $(CC) -o forceMe forceMe.c $(CFLAGS) -lcrypto -lssl
+	$(CC) -o rulesDef rulesDef.c $(CFLAGS)
+
+appli:
+	$(CC) -o appli appli.c $(CFLAGS)
 
 reseau:
-    $(CC) -o jackTheBourrin jackTheBourrin.c $(CFLAGS) -lcrypto -lssl
-
+	
 traitement:
-    $(CC) -o test test.c $(CFLAGS) -lcrypto -lssl
 
 clean:
-    $(RM) ./forceMe
-
+	$(RM) appli
