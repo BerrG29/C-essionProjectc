@@ -62,6 +62,16 @@ void desallouerMemoireMatrice(char **matrice,int nbSousMatrice){
     free(matrice);
 }
 
+/**
+ * Désallouer la mémoire d'une matrice.
+ */
+void desallouerMemoireRegles(int **matrice,int nbSousMatrice){
+    for(int i=0;i < nbSousMatrice;i++){
+        free(matrice[i]);
+    }
+    free(matrice);
+}
+
 char **copierMatrice(char **matrice,int nbLig, int nbCol){
     char **mat = allouerMemoireMatrice(nbLig,nbCol);
 
@@ -161,6 +171,14 @@ int **initMatriceRegles(int nbLig,int nbCol){
         }
     }
     return mat;
+}
+
+void reinitMatriceReglesAZero(int **matriceRules, int nbLig, int nbCol){
+    for(int i=0; i<nbLig;i++){
+        for(int j=0;j<nbCol; j++){
+            matriceRules[i][j] = 0;
+        }
+    }
 }
 
 char getTarget(char *regle){
@@ -359,26 +377,22 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int** matriceRules, 
 						if(regles[l][1] == '-' && cpt[0] >= nbCaracACompter[0])
 						{
 							matriceTemp[i][j]=resultat;
-                            matriceRules[i][j] = indexRegle;
-                            printf("Matrice[%d][%d] = %d\n",i,j,matriceRules[i][j]);
+                            matriceRules[i][j] = indexRegle;           
 						}
 						else if(regles[l][1] == '+' && cpt[0] <= nbCaracACompter[0])
 						{
 							matriceTemp[i][j]=resultat;
                             matriceRules[i][j] = indexRegle;
-                            printf("Matrice[%d][%d] = %d\n",i,j,matriceRules[i][j]);
 						}
 						else if(regles[l][1] == '0' && cpt[0] == 0)
 						{
 							matriceTemp[i][j]=resultat;
                             matriceRules[i][j] = indexRegle;
-                            printf("Matrice[%d][%d] = %d\n",i,j,matriceRules[i][j]);
 						}
 						else if(regles[l][1] == '=' && cpt[0] == nbCaracACompter[0])
 						{
 							matriceTemp[i][j]=resultat;
                             matriceRules[i][j] = indexRegle;
-                            printf("Matrice[%d][%d] = %d\n",i,j,matriceRules[i][j]);
 						}
 					}
 					else
@@ -389,22 +403,18 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int** matriceRules, 
 
 						if(regles[l][1] == '-' && cpt[0] >= nbCaracACompter[0])
 						{
-							
 							premiere_condi=1;
 						}
 						else if(regles[l][1] == '+' && cpt[0] <= nbCaracACompter[0])
 						{
-							
 							premiere_condi=1;
 						}
 						else if(regles[l][1] == '0' && cpt[0] == 0 )
 						{
-							
 							premiere_condi=1;
 						}
 						else if(regles[l][1] == '=' && cpt[0] == nbCaracACompter[0])
 						{
-							
 							premiere_condi=1;
 						}
 
@@ -414,7 +424,6 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int** matriceRules, 
 						
 						if(regles[l][6] == '-' && cpt[1] >= nbCaracACompter[1])
 						{
-							
 							deuxieme_condi=1;
 						}
 						else if(regles[l][6] == '+' && cpt[1] <= nbCaracACompter[1])
@@ -440,8 +449,7 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int** matriceRules, 
 							&& premiere_condi == 1 && deuxieme_condi == 1)
 						{
                                 matriceTemp[i][j]=resultat;
-                                matriceRules[i][j] = indexRegle;
-                                printf("Matrice[%d][%d] = %d\n",i,j,matriceRules[i][j]);
+                                matriceRules[i][j] = indexRegle;                               
 						}
 						else if(operateur[0] == '|')
 						{
@@ -449,7 +457,6 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int** matriceRules, 
 							{
                                 matriceTemp[i][j]=resultat;
                                 matriceRules[i][j] = indexRegle;
-                                printf("Matrice[%d][%d] = %d\n",i,j,matriceRules[i][j]);
 							}
 						}
 					}

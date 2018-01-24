@@ -16,24 +16,31 @@ char **rules(int *nbRules) {
    int ligne=0;
    int colonne=0;
    //char **rules = (char **) malloc(sizeof(char *) * 100);
-   char **rules; 
-    // for (int i = 0 ; i < 100 ; i++)
-    // {
-    //     rules[i] = (char *) malloc(sizeof(char)*100);
-    // }
-	// J'ai déplacé ce bloc dans "Combien de conditions ?".
+   char **rules = NULL; 
    
    //new rule
-   while(newRule!='N'){
+   while(newRule!='N' && newRule!='n'){
 		if(!rules){
 			rules = (char **) malloc(sizeof(char *)); // Pour une règle
 			rules[ligne] = (char *) malloc(sizeof(char)*minimumValueInRule);
 		} else {
-			rules = (char **) realloc(rules, sizeof(char *)); // Pour une nouvelle règle
+			// rules = (char **) realloc(rules, sizeof(char *)); // Pour une nouvelle règle
+			rules = (char **) realloc(rules, *nbRules * sizeof(char *)); // Pour une nouvelle règle avec la redimension
+			if(!rules){
+				for(int i=0;i<*nbRules ; i++){
+					free(rules[i]);
+				}
+				free(rules);
+				exit(EXIT_FAILURE);
+			} 
 			rules[ligne] = (char *) malloc(sizeof(char)*minimumValueInRule);
 		}
 
 		if(!rules){
+			for(int i=0;i<*nbRules ; i++){
+				free(rules[i]);
+			}
+			free(rules);
 			exit(EXIT_FAILURE);
 		} 
 
