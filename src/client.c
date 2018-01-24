@@ -3,27 +3,10 @@
 //
 #include <string.h>
 #include "client.h"
-#include "thirdParty/mongoose/mongoose.h"
+#include "../thirdParty/mongoose/mongoose.h"
 
 static int s_exit_flag = 0;
 char *result = NULL;
-
-static char *array2DtoArray(int x, int y, char data[x][y]) {
-    char *res = malloc(sizeof(char*) * (x + 1) * y);
-    if (!res) {
-        return NULL;
-    }
-
-    for (int i = 0; i < x; i++) {
-        for (int j = 0; j < y; j++) {
-            char tmp[1];
-            sprintf(tmp, "%c", data[i][j]);
-            strcat(res, tmp);
-        }
-        strcat(res, "\n");
-    }
-    return res;
-}
 
 static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
     struct http_message *hm = (struct http_message *) ev_data;
@@ -54,7 +37,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
 char *client_get(char *url) {
     struct mg_mgr mgr;
     mg_mgr_init(&mgr, NULL);
-
+    s_exit_flag = 0;
     if (!url) {
         return NULL;
     }
@@ -76,7 +59,7 @@ char *client_get(char *url) {
 char *client_post(char *url, char *data) {
     struct mg_mgr mgr;
     mg_mgr_init(&mgr, NULL);
-
+    s_exit_flag = 0;
     if (!url) {
         return NULL;
     }
@@ -88,6 +71,7 @@ char *client_post(char *url, char *data) {
     }
 
     if (!result) {
+        printf("\nNO Result\n");
         return NULL;
     }
     char *res = strdup(result);
@@ -96,6 +80,50 @@ char *client_post(char *url, char *data) {
     return res;
 }
 
+// TODO Add a matrix to copy the rules
+int send_matrix(int line_len, int column_len, char **matrix, char *adr_server_odd, char *adr_server_pair) {
+    char *m_odd = malloc(sizeof(char*) * line_len * column_len);
+    if (!m_odd) {
+        return EXIT_FAILURE;
+    }
+
+    char *m_pair = malloc(sizeof(char*) * line_len * column_len);
+    if (!m_pair) {
+        return EXIT_FAILURE;
+    }
+
+    strcpy(m_odd, "");
+    strcpy(m_pair, "");
+    char tmp[1];
+    for (int i = 0; i < line_len; i++) {
+        if (i % 2 == 0) {
+            for (int j = 0; j < column_len; j++) {
+                sprintf(tmp, "%c", matrix[i][j]);
+                strcat(m_pair, tmp);
+            }
+            strcat(m_pair, "\n");
+        } else {
+            for (int j = 0; j < column_len; j++) {
+                sprintf(tmp, "%c", matrix[i][j]);
+                strcat(m_odd, tmp);
+            }
+            strcat(m_odd, "\n");
+        }
+    }
+
+    printf("\nm_pair:\n%s\nm_odd:\n%s\n", m_pair, m_odd);
+
+    int res = 0;
+    int odd_res = client_post(adr_server_odd, m_odd);
+    int pair_res = client_post(adr_server_pair, m_pair);
+    if (odd_res == 100 && pair_res == 100) {
+        res = 1; // return 1 if is Cylic, 0 else
+    }
+    free(m_pair);
+    free(m_odd);
+    return res;
+}
+/*
 int main(int argc, char *argv[]) {
 
     int x = 5;
@@ -112,22 +140,23 @@ int main(int argc, char *argv[]) {
     char *res2 = client_post(argv[1], tmp);
 
     if (res2) {
-        printf("ici: %s\n", res2);
+        printf("%s\n", res2);
     } else {
         printf("No results\n");
     }
     free(res2);
-
-    /*
-    printf("-------\n");
-    char *res = client_get(argv[1]);
-    if (res) {
-        printf("%s", res);
-    } else {
-        printf("No results\n");
-    }
-    free(res);
 */
-
-    return 0;
+/*
+printf("-------\n");
+char *res = client_get(argv[1]);
+if (res) {
+    printf("%s", res);
+} else {
+    printf("No results\n");
 }
+free(res);
+
+return 0;
+}
+
+ */

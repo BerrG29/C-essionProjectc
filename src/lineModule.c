@@ -6,14 +6,15 @@
 #include <stdlib.h>
 #include "lineModule.h"
 #include "storage.h"
-#include "thirdParty/mongoose/mongoose.h"
+#include "../thirdParty/mongoose/mongoose.h"
 
 #define MAX_INPUT_BUFSIZE 256
-#define DEFAULT_PORT_PAIR "5000"
-#define DEFAULT_PORT_ODD "5001"
+#define DEFAULT_PORT "5000"
 
 static const char *GET = "GET";
 static const char *POST = "POST";
+
+static int is_odd = 0; // 1 if it's true, else: 0
 
 static void mg_printf_OK(struct mg_connection *nc, char *data) {
     mg_printf(nc,
@@ -69,7 +70,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
                 mg_printf_not_found(nc);
             } else {
                 int n = atoi(query);
-                char *res = readFile(uri, n);
+                char *res = readFile(uri, n, is_odd);
                 if (res) {
                     mg_printf_OK(nc, res);
                     free(res);
@@ -82,8 +83,9 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
             if (!query) {
                 mg_printf_not_found(nc);
             } else {
-                writeFile(uri, query);
-                int cyclic = isCyclic(uri);
+                writeFile(uri, query, is_odd);
+                printf("\nWrite:%s\n", query);
+                int cyclic = isCyclic(uri, is_odd);
                 char tmp[3];
                 sprintf(tmp, "%d", cyclic);
                 mg_printf_OK(nc, tmp);
@@ -101,7 +103,7 @@ int main(int argc, char *argv[]) {
     struct mg_connection *nc;
     int port_length = 4;
     char *port = malloc(sizeof(char) * port_length);
-    strcpy(port, DEFAULT_PORT_ODD);
+    strcpy(port, DEFAULT_PORT);
     for (int i = 1; i < argc; i++) {
         if (!strncmp(argv[i], "--port", MAX_INPUT_BUFSIZE) ||
             !strncmp(argv[i], "-p", MAX_INPUT_BUFSIZE)) {
@@ -120,10 +122,10 @@ int main(int argc, char *argv[]) {
             }
             if (!strncmp(argv[i], "no", MAX_INPUT_BUFSIZE) ||
                 !strncmp(argv[i], "n", MAX_INPUT_BUFSIZE)) {
-                strcpy(port, DEFAULT_PORT_PAIR);
+                is_odd = 0;
             } else if  (!strncmp(argv[i], "yes", MAX_INPUT_BUFSIZE) ||
                         !strncmp(argv[i], "y", MAX_INPUT_BUFSIZE)) {
-                // Do nothing
+                is_odd = 1;
             } else {
                 printf("\nError : port option\n");
                 return EXIT_FAILURE;
@@ -147,7 +149,7 @@ int main(int argc, char *argv[]) {
     }
 
     mg_mgr_init(&mgr, NULL);
-    printf("Starting web server on port %s\n", port);
+    printf("Starting web server on port %s\nServer listen line odd %d\n", port, is_odd);
     nc = mg_bind(&mgr, port, ev_handler);
     if (nc == NULL) {
         printf("Failed to create listener\n");

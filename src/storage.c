@@ -5,36 +5,63 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "storage.h"
 
 #define MAX_BUFSIZE 2048
 
-int writeFile(char *path, char *data) {
+/**
+ * Function to create a folder (to store the data) if this file doesn't exist.
+ * @param path
+ */
+static void check_folder(char *path) {
+    struct stat st = {0};
+
+    if (stat(DEFAULT_FOLDER, &st) == -1) {
+        mkdir(DEFAULT_FOLDER, 0700);
+    }
+}
+
+int writeFile(char *path, char *data, int isOdd) {
 
     if (!path) {
         return EXIT_FAILURE;
     }
 
     char _path[MAX_BUFSIZE];
-    snprintf(_path, MAX_BUFSIZE, "%s%s", DEFAULT_FOLDER, path);
+    if (isOdd) {
+        snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_ODD);
+    } else {
+        snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_PAIR);
+    }
+
+    check_folder(_path);
+
     FILE *fo;
     fo = fopen(_path, "a");
     if(!fo) {
         return EXIT_FAILURE;
     }
+
     fputs(data, fo);
     fputs("\n\n", fo);
     fclose(fo);
     return EXIT_SUCCESS;
 };
 
-int isCyclic(char *path) {
+int isCyclic(char *path, int isOdd) {
     if (!path) {
         return EXIT_FAILURE;
     }
 
     char _path[MAX_BUFSIZE];
-    snprintf(_path, MAX_BUFSIZE, "%s%s", DEFAULT_FOLDER, path);
+    if (isOdd) {
+        snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_ODD);
+    } else {
+        snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_PAIR);
+    }
 
     FILE *fo;
     fo = fopen(_path, "r");
@@ -67,21 +94,25 @@ int isCyclic(char *path) {
         }
     }
 
+    fclose(fo);
     if (!strcmp(content, content2)) {
         return 100;
     }
     return 101;
 }
 
-
-char *readFile(char *path, int n) {
+char *readFile(char *path, int n, int isOdd) {
 
     if (!path) {
         return EXIT_FAILURE;
     }
 
     char _path[MAX_BUFSIZE];
-    snprintf(_path, MAX_BUFSIZE, "%s%s", DEFAULT_FOLDER, path);
+    if (isOdd) {
+        snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_ODD);
+    } else {
+        snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_PAIR);
+    }
 
     FILE *fo;
     fo = fopen(_path, "r");

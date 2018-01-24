@@ -12,6 +12,7 @@
 
 #include "lib.c"
 #include "rulesDef.c"
+#include "client.h"
 
 int main(int argc, char *argv[])
 {
@@ -45,7 +46,7 @@ int main(int argc, char *argv[])
     printf("#   Récupération règles #\n");
     printf("#-----------------------#\n\n");
 
-    regles = rules(&nbRegles);
+  /*  regles = rules(&nbRegles);
     printf("Nombre de regles %d\n",nbRegles);
     for(int i = 0; i < nbRegles ; i ++){
         for(int j = 0; j < strlen(regles[i]); j++){
@@ -53,15 +54,15 @@ int main(int argc, char *argv[])
         }
         printf("\n");
     }
-
+*/
 /*    printf("Condition 1 : '%s'\n",regles[0]);
     printf("Condition 1 - 2 : '%c'\n",regles[0][1]);*/
 
-    // int nbConditions = 3,nbCaracteres = 11;
-    // regles = allouerMemoireMatrice(nbConditions,nbCaracteres);
-    // regles[0] = "X-1O1O";  
-    // regles[1] = "0=8X1X";
-    // regles[2] = "A-1X1&-1O1X";
+     int nbConditions = 3,nbCaracteres = 11;
+     regles = allouerMemoireMatrice(nbConditions,nbCaracteres);
+     regles[0] = "X-1O1O";
+     regles[1] = "0=8X1X";
+     regles[2] = "A-1X1&-1O1X";
 
 	// regles[0] = "O-1/1A";  
     // regles[1] = "A05O2O";
@@ -99,15 +100,18 @@ int main(int argc, char *argv[])
 
 	for(int f=0;f<10;f++)
 	{
-		iteration(matrice,matrice_tmp,nbLigne,nbColonne,regles,3);
-
+		iteration(matrice,matrice_tmp,nbLigne,nbColonne,regles, nbRegles);
 
 		//matrice = matrice_tmp;
 		//TODO : Desallouer la mémoire de la matrice avant de copier les valeurs de la matrice temp.
 		//desallouerMemoireMatrice(matrice,nbLigne);
 		matrice = copierMatrice(matrice_tmp,nbLigne,nbColonne);
 
-        // TODO
+        char *adr_server_odd = "localhost:5000/simulation";
+        char *adr_server_pair = "localhost:5001/simulation";
+        int cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+        printf("cyclic %d\n", cyclic);
+        // TODO ici network
 
 		printf("\ntemps %d\n\n",f );
 
