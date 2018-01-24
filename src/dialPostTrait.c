@@ -19,7 +19,6 @@ void dialogue(int *bool_visu, int *index_iteration, int *nb_iteration, int *nb_t
 	}*/
 	printf("Voulez vous visualiser une itération particulière (O/N)?\n");
 	scanf(" %c%c", &ok, &term);
-	printf("ok = %c\n",ok );
 	valid = 0;
 	while(valid!=1){
 
