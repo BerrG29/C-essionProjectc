@@ -84,10 +84,9 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
                 mg_printf_not_found(nc);
             } else {
                 writeFile(uri, query, is_odd);
-                printf("\nWrite:%s\n", query);
-                int cyclic = isCyclic(uri, is_odd);
-                char tmp[3];
-                sprintf(tmp, "%d", cyclic);
+                int stable = isStable(uri, is_odd);
+                char tmp[2];
+                sprintf(tmp, "%d", stable);
                 mg_printf_OK(nc, tmp);
                 free(query);
             }
@@ -102,7 +101,7 @@ int main(int argc, char *argv[]) {
     struct mg_mgr mgr;
     struct mg_connection *nc;
     int port_length = 4;
-    char *port = malloc(sizeof(char) * port_length);
+    char *port = malloc(sizeof(char) * (port_length + 1));
     strcpy(port, DEFAULT_PORT);
     for (int i = 1; i < argc; i++) {
         if (!strncmp(argv[i], "--port", MAX_INPUT_BUFSIZE) ||

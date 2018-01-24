@@ -14,9 +14,8 @@
 
 /**
  * Function to create a folder (to store the data) if this file doesn't exist.
- * @param path
  */
-static void check_folder(char *path) {
+static void check_folder() {
     struct stat st = {0};
 
     if (stat(DEFAULT_FOLDER, &st) == -1) {
@@ -24,20 +23,34 @@ static void check_folder(char *path) {
     }
 }
 
-int writeFile(char *path, char *data, int isOdd) {
+static char *init_path(char *path, int isOdd) {
 
     if (!path) {
-        return EXIT_FAILURE;
+        return NULL;
     }
 
-    char _path[MAX_BUFSIZE];
+    char *_path = malloc(sizeof(char) * MAX_BUFSIZE);
+    if (!_path) {
+        return NULL;
+    }
+    strcpy(_path, "");
     if (isOdd) {
         snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_ODD);
     } else {
         snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_PAIR);
     }
 
-    check_folder(_path);
+    check_folder();
+
+    return _path;
+}
+
+int writeFile(char *path, char *data, int isOdd) {
+
+    char *_path = init_path(path, isOdd);
+    if (!_path) {
+        return EXIT_FAILURE;
+    }
 
     FILE *fo;
     fo = fopen(_path, "a");
@@ -48,19 +61,15 @@ int writeFile(char *path, char *data, int isOdd) {
     fputs(data, fo);
     fputs("\n\n", fo);
     fclose(fo);
+    free(_path);
     return EXIT_SUCCESS;
 };
 
-int isCyclic(char *path, int isOdd) {
-    if (!path) {
-        return EXIT_FAILURE;
-    }
+int isStable(char *path, int isOdd) {
 
-    char _path[MAX_BUFSIZE];
-    if (isOdd) {
-        snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_ODD);
-    } else {
-        snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_PAIR);
+    char *_path = init_path(path, isOdd);
+    if (!_path) {
+        return EXIT_FAILURE;
     }
 
     FILE *fo;
@@ -74,8 +83,14 @@ int isCyclic(char *path, int isOdd) {
     size_t read;
 
     char *content = malloc(sizeof(char) * MAX_BUFSIZE);
+    if(!content) {
+        fclose(fo);
+        return EXIT_FAILURE;
+    }
     char *content2 = malloc(sizeof(char) * MAX_BUFSIZE);
-    if(!content || !content2) {
+    if(!content2) {
+        free(content);
+        fclose(fo);
         return EXIT_FAILURE;
     }
     strcpy(content, "");
@@ -93,41 +108,43 @@ int isCyclic(char *path, int isOdd) {
             strncat(content, line, MAX_BUFSIZE);
         }
     }
-
+    free(line);
     fclose(fo);
-    if (!strcmp(content, content2)) {
-        return 100;
+    free(_path);
+    int res =strcmp(content, content2);
+    free(content);
+    free(content2);
+    if (!res) {
+        return 0;
     }
-    return 101;
+    return 1;
 }
 
 char *readFile(char *path, int n, int isOdd) {
 
-    if (!path) {
+    char *_path = init_path(path, isOdd);
+    if (!_path) {
         return EXIT_FAILURE;
-    }
-
-    char _path[MAX_BUFSIZE];
-    if (isOdd) {
-        snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_ODD);
-    } else {
-        snprintf(_path, MAX_BUFSIZE, "%s%s%s", DEFAULT_FOLDER, path, EXTENSION_PAIR);
     }
 
     FILE *fo;
     fo = fopen(_path, "r");
     if(!fo) {
+        free(_path);
         return NULL;
     }
+
     char *content = malloc(sizeof(char) * MAX_BUFSIZE);
     if (!content) {
+        free(_path);
+        fclose(fo);
         return NULL;
     }
+
     strcpy(content, "");
     char *line = NULL;
     size_t len = 0;
     size_t read;
-
     int table_id = 0;
     int counter = 0; // to check if it's the next table
     while ((read = getline(&line, &len, fo)) != -1) {
@@ -145,7 +162,9 @@ char *readFile(char *path, int n, int isOdd) {
             strncat(content, line, MAX_BUFSIZE);
         }
     }
+
     free(line);
     fclose(fo);
+    free(_path);
     return content;
 };

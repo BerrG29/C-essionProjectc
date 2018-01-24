@@ -5,6 +5,8 @@
 #include "client.h"
 #include "../thirdParty/mongoose/mongoose.h"
 
+#define MAX_BUFSIZE 2048
+
 static int s_exit_flag = 0;
 char *result = NULL;
 
@@ -71,9 +73,9 @@ char *client_post(char *url, char *data) {
     }
 
     if (!result) {
-        printf("\nNO Result\n");
         return NULL;
     }
+
     char *res = strdup(result);
     free(result);
     result = NULL;
@@ -82,6 +84,7 @@ char *client_post(char *url, char *data) {
 
 // TODO Add a matrix to copy the rules
 int send_matrix(int line_len, int column_len, char **matrix, char *adr_server_odd, char *adr_server_pair) {
+
     char *m_odd = malloc(sizeof(char*) * line_len * column_len);
     if (!m_odd) {
         return EXIT_FAILURE;
@@ -89,6 +92,7 @@ int send_matrix(int line_len, int column_len, char **matrix, char *adr_server_od
 
     char *m_pair = malloc(sizeof(char*) * line_len * column_len);
     if (!m_pair) {
+        free(m_odd);
         return EXIT_FAILURE;
     }
 
@@ -111,15 +115,15 @@ int send_matrix(int line_len, int column_len, char **matrix, char *adr_server_od
         }
     }
 
-    int res = 0;
-    int odd_res = atoi(client_post(adr_server_odd, m_odd));
-    int pair_res = atoi(client_post(adr_server_pair, m_pair));
-    if (odd_res == 100 && pair_res == 100) {
-        res = 1; // return 1 if is Cylic, 0 else
-    }
+    int a = client_post(adr_server_odd, m_odd);
+    int b = client_post(adr_server_pair, m_pair);
     free(m_pair);
     free(m_odd);
-    return res;
+    if (a && b) {
+        return 1;
+    }
+
+    return 0;
 }
 /*
 int main(int argc, char *argv[]) {
