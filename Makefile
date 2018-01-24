@@ -6,6 +6,8 @@ all: mongoose network traitement
 
 appli:
 	$(CC) -o ./bin/appli ./src/appli.c $(CFLAGS)
+	$(CC) -o ./bin/checkPass ./src/checkPass.c $(CFLAGS) -lcrypt
+	$(CC) -o ./bin/crypto ./src/crypto.c $(CFLAGS) -lcrypt
 
 mongoose:
 	$(CC) -c ./thirdParty/mongoose/mongoose.c -o ./bin/mongoose.o
