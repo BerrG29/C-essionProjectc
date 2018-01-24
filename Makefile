@@ -16,7 +16,7 @@ network:
 	$(CC) -o ./bin/lineModule ./src/lineModule.c $(CFLAGS) ./bin/*.o
 
 traitement:
-	$(CC) --std=c99 $(CFLAGS) $(ALLFLAGS)./src/traitement.c -o ./bin/traitement ./bin/client.o ./bin/mongoose.o
+	$(CC) --std=c99 $(CFLAGS) $(ALLFLAGS) ./src/traitement.c -o ./bin/traitement ./bin/client.o ./bin/mongoose.o
 
 clean:
 	$(RM) ./bin/*

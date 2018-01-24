@@ -111,11 +111,9 @@ int send_matrix(int line_len, int column_len, char **matrix, char *adr_server_od
         }
     }
 
-    printf("\nm_pair:\n%s\nm_odd:\n%s\n", m_pair, m_odd);
-
     int res = 0;
-    int odd_res = client_post(adr_server_odd, m_odd);
-    int pair_res = client_post(adr_server_pair, m_pair);
+    int odd_res = atoi(client_post(adr_server_odd, m_odd));
+    int pair_res = atoi(client_post(adr_server_pair, m_pair));
     if (odd_res == 100 && pair_res == 100) {
         res = 1; // return 1 if is Cylic, 0 else
     }
