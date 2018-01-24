@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 /* function returning some rules requested by a user */
-char **rules(int *nbRules) {
+char **rules(int *nbRules, int *nb_iteration) {
 
 	int minimumValueInRule = 6;
 	int nbCaseForEachCondition = 5;
@@ -17,7 +17,30 @@ char **rules(int *nbRules) {
    int colonne=0;
    //char **rules = (char **) malloc(sizeof(char *) * 100);
    char **rules = NULL; 
+   int valid=0;
+   char termi;
+    // for (int i = 0 ; i < 100 ; i++)
+    // {
+    //     rules[i] = (char *) malloc(sizeof(char)*100);
+    // }
+	// J'ai déplacé ce bloc dans "Combien de conditions ?".
    
+   //demande du nombre d'itération
+   printf("Combien d'itération voulez-vous lancer la première fois ? (entrez 1 entier)\n");
+ 			while(valid!=1){
+				if(scanf("%d%c", nb_iteration, &termi) == 2 && nb_iteration > 0)
+				{
+					valid = 1;
+				}
+				else
+				{
+			 	printf("Merci d'entrer un entier \n");
+			 	scanf(" %c",&termi);
+				printf("Combien d'itération voulez-vous relancer ? (entrez 1 entier)\n");
+				}
+			}
+
+
    //new rule
    while(newRule!='N' && newRule!='n'){
 		if(!rules){
@@ -33,6 +56,7 @@ char **rules(int *nbRules) {
 				free(rules);
 				exit(EXIT_FAILURE);
 			} 
+
 			rules[ligne] = (char *) malloc(sizeof(char)*minimumValueInRule);
 		}
 
