@@ -108,8 +108,6 @@ char **initMatriceDeTest2(){
     matrice[0][4] = 'O';
     matrice[0][5] = 'S';
 
-
-
     return matrice;
 }
 
@@ -149,8 +147,6 @@ char **initMatriceDeTest3(){
 
     return matrice;
 }
-
-
 
 char getTarget(char *regle){
     return regle[0];
@@ -333,7 +329,6 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int nbLigne, int nbC
 					{
                         caractereTest = getCaractereTest(conditions[k]);
                         distance = getDistance(conditions[k]);
-						// cpt[k]= comptage(matriceDeDonnees,regles[l][3+k*5], i, j,nbLigne,nbColonne,atoi(&regles[l][4+k*5]));
                         cpt[k]= comptage(matriceDeDonnees,caractereTest, i, j,nbLigne,nbColonne,distance);
                         nbCaracACompter[k] = getNbCaractereACompter(conditions[k]);
 					}
@@ -357,8 +352,8 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int nbLigne, int nbC
 							matriceTemp[i][j]=resultat;
 						}
 					}
-					else{
-
+					else
+                    {
 						/*
 						Validation premiere condition
 						*/
@@ -415,21 +410,26 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int nbLigne, int nbC
 						if(operateur[0] == '&' // Si l'opérateur logique est un &
 							&& premiere_condi == 1 && deuxieme_condi == 1)
 						{
-								//matriceTemp[i][j]=regles[l][10];
                                 matriceTemp[i][j]=resultat;
 						}
 						else if(operateur[0] == '|')
 						{
 							if(premiere_condi == 1 || deuxieme_condi == 1)
 							{
-								// matriceTemp[i][j]=regles[l][10];
                                 matriceTemp[i][j]=resultat;
 							}
 						}
-
-					}				
+					}
+                    free(cpt);
+                    free(nbCaracACompter);
 				}
 			}
 		}
+        free(operateur);
+        
+        for(int d = 0;d < getNBConditions(regles[l]); d++){
+            free(conditions[d]);
+        }
+        free(conditions);
 	}
 }
