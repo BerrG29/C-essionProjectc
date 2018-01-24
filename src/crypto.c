@@ -4,6 +4,7 @@
 #include <time.h>
 #include <string.h>
 #include <crypt.h>
+#include "crypto.h"
 
 int crypto(){
 
@@ -62,8 +63,4 @@ int crypto(){
   }  
   fclose(outfile);
 
-}
-
-int main(int argc, char **argv){
-	crypto();
 }

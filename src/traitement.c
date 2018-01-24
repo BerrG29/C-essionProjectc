@@ -12,6 +12,8 @@
 
 #include "lib.c"
 #include "appli.h"
+#include "crypto.h"
+#include "checkPass.h"
 #include "rulesDef.c"
 #include "client.h"
 #include "dialPostTrait.h"

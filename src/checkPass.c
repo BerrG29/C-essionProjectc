@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <crypt.h>
+#include "checkPass.h"
 
 
 int checkPass(){
@@ -77,10 +78,4 @@ int checkPass(){
   /* Close the file */
   fclose(infile);
   return res;
-}
-
-int main(int argc, char **argv){
-	int res=0;
-	res=checkPass();
-	printf("%d\n",res);
 }
