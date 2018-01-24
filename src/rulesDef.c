@@ -84,6 +84,7 @@ char **rules(int *nbRules, int *nb_iteration) {
 	 while(scanf("%d%c", &nbConditions, &term) != 2 || nbConditions>2 ){
 	 	printf("Merci d'entrer un entier (1 ou 2).\n");
 		printf("Voulez vous une ou deux conditions?\n");
+		scanf(" %c",&term);
 	 }
 	 printf("nombre de condition est de %d\n",nbConditions );
 
