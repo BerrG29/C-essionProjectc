@@ -48,8 +48,9 @@ int main(int argc, char *argv[])
     regles = rules(&nbRegles);
     printf("Nombre de regles %d\n",nbRegles);
     for(int i = 0; i < nbRegles ; i ++){
+        printf("Regle %d = ",i);
         for(int j = 0; j < strlen(regles[i]); j++){
-            printf("Regle %d = %s",i,regles[i]);
+            printf("%c",regles[i][j]);
         }
         printf("\n");
     }
@@ -99,17 +100,18 @@ int main(int argc, char *argv[])
 
 	for(int f=0;f<10;f++)
 	{
-		iteration(matrice,matrice_tmp,nbLigne,nbColonne,regles,3);
-
+		iteration(matrice,matrice_tmp,nbLigne,nbColonne,regles,nbRegles);
 
 		//matrice = matrice_tmp;
 		//TODO : Desallouer la mémoire de la matrice avant de copier les valeurs de la matrice temp.
-		//desallouerMemoireMatrice(matrice,nbLigne);
+		desallouerMemoireMatrice(matrice,nbLigne);
 		matrice = copierMatrice(matrice_tmp,nbLigne,nbColonne);
+        printf("Display adresse matrice : %p\n",matrice);
+        printf("Display adresse matrice temp : %p\n",matrice_tmp);
 
         // TODO
 
-		printf("\ntemps %d\n\n",f );
+		printf("\nTemps %d\n\n",f);
 
 		for(int i = 0;i< nbLigne;i++){
 			for(int j=0;j<nbColonne;j++){
@@ -128,7 +130,7 @@ int main(int argc, char *argv[])
     // Désallocation de la mémoire
 
 	//desallouerMemoireMatrice(conditions,PARAMETRES_DANS_CONDITIONS);
-    //desallouerMemoireMatrice(regles,nbConditions);
+    desallouerMemoireMatrice(regles,nbRegles);
 
     desallouerMemoireMatrice(matrice,nbLigne);
     desallouerMemoireMatrice(matrice_tmp,nbLigne);
