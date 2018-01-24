@@ -82,6 +82,28 @@ char *client_post(char *url, char *data) {
     return res;
 }
 
+int isCyclic(char *adr_server_odd, char *adr_server_pair) {
+
+    char *m_odd = client_get(adr_server_odd);
+    if (!m_odd) {
+        return -1;
+    }
+
+    char *m_pair = client_get(adr_server_pair);
+    if (!m_pair) {
+        free(m_odd);
+        return -1;
+    }
+
+
+    return -1;
+}
+
+char *get_matrix_n_iteration(char *adr_server_odd, char *adr_server_pair) {
+
+    return NULL;
+}
+
 // TODO Add a matrix to copy the rules
 int send_matrix(int line_len, int column_len, char **matrix, char *adr_server_odd, char *adr_server_pair) {
 

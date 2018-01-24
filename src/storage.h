@@ -26,6 +26,8 @@ int writeFile(char *path, char *data, int is_odd);
  */
 int isStable(char *path, int is_odd);
 
+char *isCyclic(char *path, int isOdd, int current_iteration);
+
 /**
  *
  * @param path file concerned

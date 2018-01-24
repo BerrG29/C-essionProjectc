@@ -79,12 +79,17 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
                 }
             }
         } else if (!strncmp(hm->method.p, POST, strlen(POST))) {
+            char *query_number = strndup(hm->query_string.p, hm->query_string.len);
+            int n = atoi(query_number);
+            free(query_number);
             char *query = strndup(hm->body.p, hm->body.len);
             if (!query) {
                 mg_printf_not_found(nc);
             } else {
                 writeFile(uri, query, is_odd);
                 int stable = isStable(uri, is_odd);
+                char *cyclic = isCyclic(uri, is_odd, n);
+                printf("%s\n", cyclic);
                 char tmp[2];
                 sprintf(tmp, "%d", stable);
                 mg_printf_OK(nc, tmp);

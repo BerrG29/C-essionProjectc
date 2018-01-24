@@ -46,9 +46,7 @@ int main(int argc, char *argv[])
     // Établissement règles
 
     int nbRegles = 0;
-
     char **regles = NULL;
-    
 
     //printRes(regles);
 
