@@ -191,7 +191,7 @@ char getResult(char *regle){
 }
 
 char **getConditions(char *regle){
-    char **conditions;
+    char **conditions = '\0';
 
     int nbCondition = (int) strlen(regle)/5; 
     conditions = (char **) malloc(nbCondition * sizeof(char *));

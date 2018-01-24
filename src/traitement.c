@@ -28,10 +28,10 @@ int main(int argc, char *argv[])
     int nb_iteration = 0;
     nb_total_iterations = 10;
 
-    char **matrice;
-    char **matrice_tmp;
+    char **matrice = NULL;
+    char **matrice_tmp = NULL;
 
-    int **matriceForRules;
+    int **matriceForRules = NULL;
 
     // TRAITEMENT 
 
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     int nbRegles = 0;
 
-    char **regles;
+    char **regles = NULL;
     
 
     //printRes(regles);
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
         else if(bool_visualisation == 1)
         {
             //TODO affichage matrice de l'itération index_iteration
-            /*printf("affichage matrice de l'itération %d\n"index_iteration);*/
+            printf("affichage matrice de l'itération %d\n",index_iteration);
         }
         dialogue(&bool_visualisation,&index_iteration,&nb_iteration,&nb_total_iterations,&bool_fin);
     }
