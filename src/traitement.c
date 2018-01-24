@@ -11,13 +11,17 @@
 #include <math.h>
 
 #include "lib.c"
+#include "appli.h"
 #include "rulesDef.c"
 #include "client.h"
 #include "dialPostTrait.h"
 
+const int MAX_INPUT_BUFSIZE=256;
+
 int main(int argc, char *argv[])
 {
-    int nbLigne = 4, nbColonne = 4;
+    //int nbLigne = 4, nbColonne = 4; // Pour la matrice de test du sujet
+    int nbLigne = 0, nbColonne = 0; 
     //int i, j, k, l;
 
     // Variables interraction utilisateur post traitement
@@ -25,30 +29,58 @@ int main(int argc, char *argv[])
     int bool_fin = 0;
     int index_iteration = 0;
     int nb_total_iterations = 0;
-    int nb_iteration = 0;
-
+    int nb_iteration = 1;
 
     char **matrice = NULL;
     char **matrice_tmp = NULL;
+    char **regles = NULL;
 
     int **matriceForRules = NULL;
+
+    int mLigne = 0, mColonne = 0;
+	int nbRegles = 0, rColonne = 0;
+
+    for (int i = 1; i < argc; i++) {	
+		if (!strncmp(argv[i], "-matrix", MAX_INPUT_BUFSIZE)) {
+			printf("Matrix : \n");
+			matrice = getDataMatrix(argv[i+1],&nbLigne,&nbColonne);
+			printRes(matrice,nbLigne,nbColonne);
+            matrice_tmp = copierMatrice(matrice,nbLigne,nbColonne);
+			printf("Matrix : \n");
+		}
+		if (!strncmp(argv[i], "-rules", MAX_INPUT_BUFSIZE)){
+			printf("Rules Matrix : \n");
+			regles = getRulesMatrix(argv[i+1],&nbRegles,&rColonne);
+			printRes(regles,nbRegles,rColonne);
+			printf("\n");
+		}
+    }
+
+    if(!matrice){
+        printf("Vous n'avez pas matrice de données");
+        exit(EXIT_FAILURE);
+    }
+    
+    if(!regles){
+        regles = rules(&nbRegles,&nb_iteration);
+    }
+
+    if(!regles || !matrice){
+        printf("Vous n'avez pas rentrée de règles");
+        exit(EXIT_FAILURE);
+    }
 
     // TRAITEMENT 
 
     // Écriture 
 
-    matrice = initMatriceDeTest(nbLigne,nbColonne);
-    matrice_tmp = initMatriceDeTest(nbLigne,nbColonne);
+    // matrice = initMatriceDeTest(nbLigne,nbColonne);
+    // matrice_tmp = initMatriceDeTest(nbLigne,nbColonne);
     matriceForRules = initMatriceRegles(nbLigne,nbColonne);
 
     // Fin écriture
 
     // Établissement règles
-
-    int nbRegles = 0;
-
-    char **regles = NULL;
-    
 
     //printRes(regles);
 
@@ -59,7 +91,7 @@ int main(int argc, char *argv[])
     printf("#-----------------------#\n\n");
 
 
-    regles = rules(&nbRegles,&nb_iteration);
+    // regles = rules(&nbRegles,&nb_iteration);
     printf("Nombre de regles %d\n",nbRegles);
     for(int i = 0; i < nbRegles ; i ++){
         printf("Regle %d = ",i);
@@ -127,7 +159,6 @@ int main(int argc, char *argv[])
         {
         	for(int f=0;f<nb_iteration;f++)
         	{
-
         		iteration(matrice,matrice_tmp,matriceForRules,nbLigne,nbColonne,regles,nbRegles);
 
         		//TODO : Desallouer la mémoire de la matrice avant de copier les valeurs de la matrice temp.

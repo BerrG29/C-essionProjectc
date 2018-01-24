@@ -2,10 +2,10 @@ CC = cc
 CFLAGS = -g -W
 ALLFLAGS = -Wall
 RM = rm -f
-all: mongoose network traitement
+all: appli mongoose network traitement
 
 appli:
-	$(CC) -o ./bin/appli ./src/appli.c $(CFLAGS)
+	$(CC) -c ./src/appli.c -o ./bin/appli.o $(CFLAGS)
 
 mongoose:
 	$(CC) -c ./thirdParty/mongoose/mongoose.c -o ./bin/mongoose.o
@@ -18,7 +18,7 @@ network:
 traitement:
 	$(CC) --std=c99 -c ./src/dialPostTrait.c -o ./bin/dialPostTrait.o $(CFLAGS)
 	#$(CC) --std=c99 $(CFLAGS) $(ALLFLAGS) ./src/traitement.c -o ./bin/traitement ./bin/client.o ./bin/mongoose.o
-	$(CC) --std=c99 $(CFLAGS) $(ALLFLAGS) ./src/traitement.c -o ./bin/traitement ./bin/dialPostTrait.o
+	$(CC) --std=c99 $(CFLAGS) $(ALLFLAGS) ./src/traitement.c -o ./bin/traitement ./bin/dialPostTrait.o ./bin/appli.o
 
 clean:
 	$(RM) ./bin/*

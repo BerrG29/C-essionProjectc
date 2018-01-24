@@ -4,8 +4,7 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <stdio.h>
-
-int MAX_INPUT_BUFSIZE=256;
+#include "appli.h"
 
 void printRes(char **matrix,int ligne,int colonne){
    //priting
@@ -145,31 +144,31 @@ char **getRulesMatrix(char *nameFile, int *rLigne, int *rColonne){
 
 
 
-int main(int argc, char *argv[])
-{
-	printf("Getting rules\n");
+// int main(int argc, char *argv[])
+// {
+// 	printf("Getting rules\n");
 
-	char **mat = NULL;
+// 	char **mat = NULL;
 
-	int mLigne = 0, mColonne = 0;
-	int rLigne = 0, rColonne = 0;
+// 	int mLigne = 0, mColonne = 0;
+// 	int rLigne = 0, rColonne = 0;
 
-    for (int i = 1; i < argc; i++) {	
-		if (!strncmp(argv[i], "-matrix", MAX_INPUT_BUFSIZE)) {
-			printf("Matrix : \n");
-			mat = getDataMatrix(argv[i+1],&mLigne,&mColonne);
-			printRes(mat,mLigne,mColonne);
-			printf("Matrix : \n");
-		}
-		if (!strncmp(argv[i], "-rules", MAX_INPUT_BUFSIZE)){
-			printf("Rules Matrix : \n");
-			mat = getRulesMatrix(argv[i+1],&rLigne,&rColonne);
-			printRes(mat,rLigne,rColonne);
-			printf("\n");
-		}
-    }
+//     for (int i = 1; i < argc; i++) {	
+// 		if (!strncmp(argv[i], "-matrix", MAX_INPUT_BUFSIZE)) {
+// 			printf("Matrix : \n");
+// 			mat = getDataMatrix(argv[i+1],&mLigne,&mColonne);
+// 			printRes(mat,mLigne,mColonne);
+// 			printf("Matrix : \n");
+// 		}
+// 		if (!strncmp(argv[i], "-rules", MAX_INPUT_BUFSIZE)){
+// 			printf("Rules Matrix : \n");
+// 			mat = getRulesMatrix(argv[i+1],&rLigne,&rColonne);
+// 			printRes(mat,rLigne,rColonne);
+// 			printf("\n");
+// 		}
+//     }
 
-	printf("Matrice data ligne : %d, colonne : %d\n",mLigne,mColonne);
-	printf("Matrice rule ligne : %d, colonne : %d\n",rLigne,rColonne);
-    return EXIT_SUCCESS;
-}
+// 	printf("Matrice data ligne : %d, colonne : %d\n",mLigne,mColonne);
+// 	printf("Matrice rule ligne : %d, colonne : %d\n",rLigne,rColonne);
+//     return EXIT_SUCCESS;
+// }
