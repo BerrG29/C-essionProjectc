@@ -93,14 +93,13 @@ void dialogue(int *bool_visu, int *index_iteration, int *nb_iteration, int *nb_t
 }
 
 
-int main(int argc, char const *argv[])
+/*int main(int argc, char const *argv[])
 {
 	int bool_visualisation = 0;
 	int bool_fin = 0;
 	int index_iteration = 0;
 	int nb_total_iterations = 0;
 	int nb_iteration = 0;
-
 	nb_total_iterations = 15;
 
 
@@ -113,4 +112,4 @@ int main(int argc, char const *argv[])
 	printf("\n\nnb_iteration du main  =  %d\n",nb_iteration );
 	printf("\n\nbool_fin du main  =  %d\n",bool_fin );
 	return 0;
-}
+}*/

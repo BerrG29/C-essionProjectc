@@ -13,11 +13,20 @@
 #include "lib.c"
 #include "rulesDef.c"
 #include "client.h"
+#include "dialPostTrait.c"
 
 int main(int argc, char *argv[])
 {
     int nbLigne = 4, nbColonne = 4;
     //int i, j, k, l;
+
+    // Variables interraction utilisateur post traitement
+    int bool_visualisation = 0;
+    int bool_fin = 0;
+    int index_iteration = 0;
+    int nb_total_iterations = 0;
+    int nb_iteration = 0;
+    nb_total_iterations = 5;
 
     char **matrice;
     char **matrice_tmp;
@@ -128,6 +137,9 @@ int main(int argc, char *argv[])
 			printf("\n");
 		}
 		printf("\n");
+
+        dialogue(&bool_visualisation,&index_iteration,&nb_iteration,&nb_total_iterations,&bool_fin);
+        
 	}
  
 
