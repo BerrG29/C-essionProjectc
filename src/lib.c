@@ -473,10 +473,10 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int** matriceRules, 
         free(conditions);
 	}
 
-    for(int i = 0;i< nbLigne;i++){
+   /* for(int i = 0;i< nbLigne;i++){
         for(int j=0;j<nbColonne;j++){
             printf("%d",matriceRules[i][j]);
         }
         printf("\n");
-    }
+    }*/
 }

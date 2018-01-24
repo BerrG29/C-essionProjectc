@@ -80,12 +80,12 @@ char **rules(int *nbRules, int *nb_iteration) {
  	 }
 	 colonne++;
 
-	 printf("Combien voulez vous de conditions?\n");
-	 while(scanf("%d%c", &nbConditions, &term) != 2 || term != '\n'){
-	 	printf("Merci d'entrer un entier.\n");
-		scanf(" %c",&term);
-		printf("Combien voulez vous de conditions?\n");
+	 printf("Voulez vous une ou deux conditions?\n");
+	 while(scanf("%d%c", &nbConditions, &term) != 2 || nbConditions>2 ){
+	 	printf("Merci d'entrer un entier (1 ou 2).\n");
+		printf("Voulez vous une ou deux conditions?\n");
 	 }
+	 printf("nombre de condition est de %d\n",nbConditions );
 
 	if(nbConditions > 1){
 		rules[ligne] = (char *)realloc(rules[ligne],minimumValueInRule + nbCaseForEachCondition * nbConditions * sizeof(char));

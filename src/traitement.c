@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     int index_iteration = 0;
     int nb_total_iterations = 0;
     int nb_iteration = 0;
-    nb_total_iterations = 10;
+
 
     char **matrice = NULL;
     char **matrice_tmp = NULL;
@@ -149,7 +149,8 @@ int main(int argc, char *argv[])
                 reinitMatriceReglesAZero(matriceForRules,nbLigne,nbColonne);
 
         	}
-            printf("Affichage matrice de l'itération %d\n",nb_iteration );
+            nb_total_iterations+=nb_iteration;
+            printf("Affichage matrice de l'itération %d\n\n\n\n",nb_total_iterations );
             for(int i = 0;i< nbLigne;i++)
             {
                 for(int j=0;j<nbColonne;j++){
@@ -158,11 +159,12 @@ int main(int argc, char *argv[])
                 printf("\n");
             }
             printf("\n");
+
         }
         else if(bool_visualisation == 1)
         {
             //TODO affichage matrice de l'itération index_iteration
-            printf("affichage matrice de l'itération %d\n",index_iteration);
+           printf("affichage de la matrice de l'itération %d\n",index_iteration);
         }
         dialogue(&bool_visualisation,&index_iteration,&nb_iteration,&nb_total_iterations,&bool_fin);
     }
