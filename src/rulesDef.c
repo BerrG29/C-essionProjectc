@@ -17,7 +17,6 @@ char **rules(int *nbRules) {
    int colonne=0;
    //char **rules = (char **) malloc(sizeof(char *) * 100);
    char **rules; 
-   rules = (char **) malloc(sizeof(char *)); // Pour une règle
     // for (int i = 0 ; i < 100 ; i++)
     // {
     //     rules[i] = (char *) malloc(sizeof(char)*100);
