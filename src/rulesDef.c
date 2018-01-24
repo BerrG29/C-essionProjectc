@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 /* function returning some rules requested by a user */
-char **rules(int *nbRules) {
+char **rules(int *nbRules, int *nb_iteration) {
 
 	int minimumValueInRule = 6;
 	int nbCaseForEachCondition = 5;
@@ -16,28 +16,59 @@ char **rules(int *nbRules) {
    int ligne=0;
    int colonne=0;
    //char **rules = (char **) malloc(sizeof(char *) * 100);
-   char **rules; 
+   char **rules = NULL; 
+   int valid=0;
+   char termi;
     // for (int i = 0 ; i < 100 ; i++)
     // {
     //     rules[i] = (char *) malloc(sizeof(char)*100);
     // }
 	// J'ai déplacé ce bloc dans "Combien de conditions ?".
    
+   //demande du nombre d'itération
+   printf("Combien d'itération voulez-vous lancer la première fois ? (entrez 1 entier)\n");
+	while(valid!=1){
+		if(scanf("%d%c", nb_iteration, &termi) == 2 && nb_iteration > 0)
+		{
+			valid = 1;
+		}
+		else
+		{
+			printf("Merci d'entrer un entier \n");
+			scanf(" %c",&termi);
+			printf("Combien d'itération voulez-vous relancer ? (entrez 1 entier)\n");
+		}
+	}
+
+
    //new rule
-   while(newRule!='N'){
+   while(newRule!='N' && newRule!='n'){
+	   *nbRules+= 1;
+
 		if(!rules){
 			rules = (char **) malloc(sizeof(char *)); // Pour une règle
 			rules[ligne] = (char *) malloc(sizeof(char)*minimumValueInRule);
 		} else {
-			rules = (char **) realloc(rules, sizeof(char *)); // Pour une nouvelle règle
+			// rules = (char **) realloc(rules, sizeof(char *)); // Pour une nouvelle règle
+			rules = (char **) realloc(rules, *nbRules * sizeof(char *)); // Pour une nouvelle règle avec la redimension
+			if(!rules){
+				for(int i=0;i<*nbRules ; i++){
+					free(rules[i]);
+				}
+				free(rules);
+				exit(EXIT_FAILURE);
+			} 
+
 			rules[ligne] = (char *) malloc(sizeof(char)*minimumValueInRule);
 		}
 
 		if(!rules){
+			for(int i=0;i<*nbRules ; i++){
+				free(rules[i]);
+			}
+			free(rules);
 			exit(EXIT_FAILURE);
 		} 
-
-	   *nbRules+= 1;
 		char term;
 		int nb;
 		cpt=1;
@@ -49,16 +80,21 @@ char **rules(int *nbRules) {
  	 }
 	 colonne++;
 
-	 printf("Combien voulez vous de conditions?\n");
-	 while(scanf("%d%c", &nbConditions, &term) != 2 || term != '\n'){
-	 	printf("Merci d'entrer un entier.\n");
+	 printf("Voulez vous une ou deux conditions?\n");
+	 while(scanf("%d%c", &nbConditions, &term) != 2 || nbConditions>2 ){
+	 	printf("Merci d'entrer un entier (1 ou 2).\n");
+		printf("Voulez vous une ou deux conditions?\n");
 		scanf(" %c",&term);
-		printf("Combien voulez vous de conditions?\n");
 	 }
+	 printf("nombre de condition est de %d\n",nbConditions );
 
 	if(nbConditions > 1){
-		rules[ligne] = (char *)realloc(rules[ligne],nbCaseForEachCondition * nbConditions * sizeof(char));
-		if(!rules[ligne]){
+		rules[ligne] = (char *)realloc(rules[ligne],minimumValueInRule + nbCaseForEachCondition * nbConditions * sizeof(char));
+		if(!rules || !rules[ligne]){
+			for(int i =0;i<*nbRules;i++){
+				free(rules[i]);
+			}
+			free(rules);
 			exit(EXIT_FAILURE);
 		}
 	}

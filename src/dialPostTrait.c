@@ -6,14 +6,19 @@
 
 void dialogue(int *bool_visu, int *index_iteration, int *nb_iteration, int *nb_total, int *bool_fin){
 
-	char ok;
-	char term;
-	int valid;
+	char ok = "";
+	char term = "";
+	int valid = 0;
 
-
+	/*if(*nb_cycles==*nb_total_iterations)
+	{
+		printf("Aucune stabilité\n" );
+	}
+	else{
+		printf("La matrice devient stable à la %d itération \n",*nb_cycles);
+	}*/
 	printf("Voulez vous visualiser une itération particulière (O/N)?\n");
-	scanf("%c%c", &ok, &term);
-
+	scanf(" %c%c", &ok, &term);
 	valid = 0;
 	while(valid!=1){
 
@@ -112,4 +117,5 @@ void dialogue(int *bool_visu, int *index_iteration, int *nb_iteration, int *nb_t
 	printf("\n\nnb_iteration du main  =  %d\n",nb_iteration );
 	printf("\n\nbool_fin du main  =  %d\n",bool_fin );
 	return 0;
-}*/
+}
+*/
