@@ -12,6 +12,7 @@
 
 #include "lib.c"
 #include "rulesDef.c"
+#include "client.h"
 
 int main(int argc, char *argv[])
 {
@@ -100,9 +101,12 @@ int main(int argc, char *argv[])
     // int deuxieme_condi;
 
 		// Lancement
-
+    char *adr_server_odd = "localhost:5000/simulation";
+    char *adr_server_pair = "localhost:5001/simulation";
+    send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
 	for(int f=0;f<10;f++)
 	{
+
 		iteration(matrice,matrice_tmp,matriceForRules,nbLigne,nbColonne,regles,nbRegles);
 
 		//TODO : Desallouer la mémoire de la matrice avant de copier les valeurs de la matrice temp.
@@ -111,6 +115,9 @@ int main(int argc, char *argv[])
         // printf("Display adresse matrice : %p\n",matrice);
         // printf("Display adresse matrice temp : %p\n",matrice_tmp);
 
+        int cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+        printf("cyclic %d\n", cyclic);
+        // TODO ici network
 
 		printf("\nTemps %d\n\n",f);
 

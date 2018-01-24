@@ -20,4 +20,9 @@ char *client_get(char *url);
  */
 char *client_post(char *url, char *data);
 
+int send_matrix(int line_len, int column_len, char **matrix, char *adr_server_odd, char *adr_server_pair);
+
+int **get_matrix(int n);
+
+
 #endif //C_ESSIONPROJECTC_CLIENT_H
