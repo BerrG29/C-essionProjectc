@@ -13,7 +13,7 @@
 #include "lib.c"
 #include "rulesDef.c"
 #include "client.h"
-#include "dialPostTrait.c"
+#include "dialPostTrait.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     int index_iteration = 0;
     int nb_total_iterations = 0;
     int nb_iteration = 0;
-    nb_total_iterations = 5;
+    nb_total_iterations = 10;
 
     char **matrice;
     char **matrice_tmp;
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
     // Établissement règles
 
-    int nbRegles = 3;
+    int nbRegles = 0;
 
     char **regles;
     
@@ -58,24 +58,24 @@ int main(int argc, char *argv[])
     printf("#   Récupération règles #\n");
     printf("#-----------------------#\n\n");
 
-    //regles = rules(&nbRegles);
-    // printf("Nombre de regles %d\n",nbRegles);
-    // for(int i = 0; i < nbRegles ; i ++){
-    //     printf("Regle %d = ",i);
-    //     for(int j = 0; j < strlen(regles[i]); j++){
-    //         printf("%c",regles[i][j]);
-    //     }
-    //     printf("\n");
-    // }
+    regles = rules(&nbRegles,&nb_iteration);
+    printf("Nombre de regles %d\n",nbRegles);
+    for(int i = 0; i < nbRegles ; i ++){
+        printf("Regle %d = ",i);
+        for(int j = 0; j < strlen(regles[i]); j++){
+            printf("%c",regles[i][j]);
+        }
+        printf("\n");
+    }
 
 /*    printf("Condition 1 : '%s'\n",regles[0]);
     printf("Condition 1 - 2 : '%c'\n",regles[0][1]);*/
 
-    int nbConditions = 3,nbCaracteres = 11;
+   /* int nbConditions = 3,nbCaracteres = 11;
     regles = allouerMemoireMatrice(nbConditions,nbCaracteres);
     regles[0] = "X-1O1O";  
     regles[1] = "O=8X1X";
-    regles[2] = "A-1X1&-1O1X";
+    regles[2] = "A-1X1&-1O1X";*/
 
 	// regles[0] = "O-1/1A";  
     // regles[1] = "A05O2O";
@@ -112,36 +112,53 @@ int main(int argc, char *argv[])
 		// Lancement
     char *adr_server_odd = "localhost:5000/simulation";
     char *adr_server_pair = "localhost:5001/simulation";
-    send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
-	for(int f=0;f<10;f++)
-	{
+    //send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+    int compteur_cycle = 0;
+    int cyclic = 1000;
+    while(bool_fin!=1)
+    {
+        if(bool_visualisation==0)
+        {
+        	for(int f=0;f<nb_iteration;f++)
+        	{
 
-		iteration(matrice,matrice_tmp,matriceForRules,nbLigne,nbColonne,regles,nbRegles);
+        		iteration(matrice,matrice_tmp,matriceForRules,nbLigne,nbColonne,regles,nbRegles);
 
-		//TODO : Desallouer la mémoire de la matrice avant de copier les valeurs de la matrice temp.
-		desallouerMemoireMatrice(matrice,nbLigne);
-		matrice = copierMatrice(matrice_tmp,nbLigne,nbColonne);
-        // printf("Display adresse matrice : %p\n",matrice);
-        // printf("Display adresse matrice temp : %p\n",matrice_tmp);
+        		//TODO : Desallouer la mémoire de la matrice avant de copier les valeurs de la matrice temp.
+        		desallouerMemoireMatrice(matrice,nbLigne);
+        		matrice = copierMatrice(matrice_tmp,nbLigne,nbColonne);
+                // printf("Display adresse matrice : %p\n",matrice);
+                // printf("Display adresse matrice temp : %p\n",matrice_tmp);
 
-        int cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
-        printf("cyclic %d\n", cyclic);
-        // TODO ici network
+               // int cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+            /*    if(cyclic==0)
+                {
+                    compteur_cycle++;
+                }*/
 
-		printf("\nTemps %d\n\n",f);
+             /*   printf("cyclic %d\n", cyclic);
+                // TODO ici network
 
-		for(int i = 0;i< nbLigne;i++){
-			for(int j=0;j<nbColonne;j++){
-				printf("%c",matrice[i][j]);
-			}
-			printf("\n");
-		}
-		printf("\n");
+        		printf("\nTemps %d\n\n",f);*/
 
+        	}
+            printf("Affichage matrice de l'itération %d\n",nb_iteration );
+            for(int i = 0;i< nbLigne;i++)
+            {
+                for(int j=0;j<nbColonne;j++){
+                    printf("%c",matrice[i][j]);
+                }
+                printf("\n");
+            }
+            printf("\n");
+        }
+        else if(bool_visualisation == 1)
+        {
+            //TODO affichage matrice de l'itération index_iteration
+            /*printf("affichage matrice de l'itération %d\n"index_iteration);*/
+        }
         dialogue(&bool_visualisation,&index_iteration,&nb_iteration,&nb_total_iterations,&bool_fin);
-        
-	}
- 
+    }
 
     printf("\n#-----------------------#\n");
 	printf("#    Fin traitement     #\n");
