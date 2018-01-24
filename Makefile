@@ -2,10 +2,14 @@ CC = cc
 CFLAGS = -g -W
 ALLFLAGS = -Wall
 RM = rm -f
-all: appli mongoose network traitement
+
+all: appli mongoose network traitement affichage
 
 appli:
 	$(CC) -c ./src/appli.c -o ./bin/appli.o $(CFLAGS)
+
+affichage: 
+	$(CC) -o projet projet_c.c $(CFLAGS)
 
 mongoose:
 	$(CC) -c ./thirdParty/mongoose/mongoose.c -o ./bin/mongoose.o
