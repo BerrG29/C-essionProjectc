@@ -5,7 +5,7 @@
 #include "couleur.c"
 #include "couleur.h"
 #include "echequier.h"
-#include "echiquier.c"
+#include "echequier.c"
 
 int main (int argc, char *argv[]){
 	

@@ -56,7 +56,7 @@ void saisieValue(int nbL, int nbC, int ** tableau, int ** tab, char * chainepair
     }
 }
 
-void affichage(int nbL, int nbC, int ** tableau, int ** tab){	
+void affichage(int nbL, int nbC, char ** tableau, int ** tab){	
 	int i,j;
 	for(i=0; i<nbL; i++){
 		for(j=0; j<nbC; j++){	
@@ -66,7 +66,7 @@ void affichage(int nbL, int nbC, int ** tableau, int ** tab){
 			else if(tab[i][j] == 2){
 				printf ("\e[32;1m %c \e[0m", tableau[i][j]);
 			}
-			else if(tab[i][j] == 6){
+			else if(tab[i][j] == 1){
 				printf ("\e[34;1m %c \e[0m", tableau[i][j]);
 			}
 			else{ 
