@@ -17,6 +17,9 @@
 #include "rulesDef.c"
 #include "client.h"
 #include "dialPostTrait.h"
+#include "constantes.h"
+#include "echequier.h"
+#include "couleur.h"
 
 const int MAX_INPUT_BUFSIZE=256;
 
@@ -24,7 +27,6 @@ int main(int argc, char *argv[])
 {
     //int nbLigne = 4, nbColonne = 4; // Pour la matrice de test du sujet
     int nbLigne = 0, nbColonne = 0; 
-    //int i, j, k, l;
 
     // Variables interraction utilisateur post traitement
     int bool_visualisation = 0;
@@ -33,16 +35,34 @@ int main(int argc, char *argv[])
     int nb_total_iterations = 0;
     int nb_iteration = 1;
 
+    char *adr_server_odd = "localhost:5000/simulation";
+    char *adr_server_pair = "localhost:5001/simulation";
+
     char **matrice = NULL;
     char **matrice_tmp = NULL;
     char **regles = NULL;
 
     int **matriceForRules = NULL;
+    int **matriceForRulesToDisplay = NULL;
 
     int mLigne = 0, mColonne = 0;
 	int nbRegles = 0, rColonne = 0;
 
-    for (int i = 1; i < argc; i++) {	
+    for (int i = 1; i < argc; i++) {
+        if (!strncmp(argv[i], "-admin", MAX_INPUT_BUFSIZE)) {
+            // TODO S'IL N'Y A PAS DE FICHIERS, AUTORISER L'ACCES À CRYPTO
+            // SINON AUTHENTIFICATION
+            crypto();
+		}	
+        if (!strncmp(argv[i], "-conf", MAX_INPUT_BUFSIZE)) {
+
+            if(checkPass()==1){
+                // TODO CHARGER LE FICHIER CONF ... 
+                // SIMON ECRIT, NOUS ON RECUPERE LES NOUVELLES 
+            } else {
+                // SALUT
+            }
+		}	
 		if (!strncmp(argv[i], "-matrix", MAX_INPUT_BUFSIZE)) {
 			printf("Matrix : \n");
 			matrice = getDataMatrix(argv[i+1],&nbLigne,&nbColonne);
@@ -59,7 +79,7 @@ int main(int argc, char *argv[])
     }
 
     if(!matrice){
-        printf("Vous n'avez pas matrice de données");
+        printf("Vous n'avez pas matrice de données ou elle n'est pas valide");
         exit(EXIT_FAILURE);
     }
     
@@ -72,6 +92,15 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
+    // TODO : Intégrer la partie avec l'entrée d'iterations
+    // int nbIter;
+    // char term;
+    // printf("Combien d'iteration souhaitez vous pour commencer?\n");     
+    // while(scanf("%d%c", &nbIter, &term) != 2 ){
+    //     printf("Merci d'entrer un entier.\n");        
+    //     printf("Combien d'iteration souhaitez vous pour commencer?\n");
+    //     scanf(" %c",&term);
+    // }
     // TRAITEMENT 
 
     // Écriture 
@@ -79,6 +108,7 @@ int main(int argc, char *argv[])
     // matrice = initMatriceDeTest(nbLigne,nbColonne);
     // matrice_tmp = initMatriceDeTest(nbLigne,nbColonne);
     matriceForRules = initMatriceRegles(nbLigne,nbColonne);
+    matriceForRulesToDisplay = initMatriceRegles(nbLigne,nbColonne);
 
     // Fin écriture
 
@@ -150,8 +180,6 @@ int main(int argc, char *argv[])
     //char *adr_server_odd = "148.60.220.134:5000/testReseau";
     //char *adr_server_pair = "148.60.220.134:5001/testReseau";
 
-    char *adr_server_odd = "localhost:5000/simulation";
-    char *adr_server_pair = "localhost:5001/simulation";
     //send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
     int compteur_cycle = 0;
     int cyclic = 1000;
@@ -162,10 +190,9 @@ int main(int argc, char *argv[])
         	for(int f=0;f<nb_iteration;f++)
         	{
         		iteration(matrice,matrice_tmp,matriceForRules,nbLigne,nbColonne,regles,nbRegles);
-
-        		//TODO : Desallouer la mémoire de la matrice avant de copier les valeurs de la matrice temp.
         		desallouerMemoireMatrice(matrice,nbLigne);
         		matrice = copierMatrice(matrice_tmp,nbLigne,nbColonne);
+
                 // printf("Display adresse matrice : %p\n",matrice);
                 // printf("Display adresse matrice temp : %p\n",matrice_tmp);
 
@@ -175,22 +202,29 @@ int main(int argc, char *argv[])
                     compteur_cycle++;
                 }*/
 
+                //affichage(nbLigne,nbColonne,matrice,matriceForRules);
+
                 /*   printf("cyclic %d\n", cyclic);
                 // TODO ici network
 
         		printf("\nTemps %d\n\n",f);*/
+                desallouerMemoireRegles(matriceForRulesToDisplay,nbLigne);
+                matriceForRulesToDisplay = copierMatriceRegles(matriceForRules,nbLigne,nbColonne);
                 reinitMatriceReglesAZero(matriceForRules,nbLigne,nbColonne);
-
         	}
+
             nb_total_iterations+=nb_iteration;
-            printf("Affichage matrice de l'itération %d\n\n\n\n",nb_total_iterations );
-            for(int i = 0;i< nbLigne;i++)
-            {
-                for(int j=0;j<nbColonne;j++){
-                    printf("%c",matrice[i][j]);
-                }
-                printf("\n");
-            }
+            printf("Affichage matrice de l'itération %d\n\n\n\n",nb_total_iterations);
+            // for(int i = 0;i< nbLigne;i++)
+            // {
+            //     for(int j=0;j<nbColonne;j++){
+            //         printf("%c",matrice[i][j]);
+            //     }
+            //     printf("\n");
+            // }
+
+            affichage(nbLigne,nbColonne,matrice,matriceForRulesToDisplay);
+
             printf("\n");
 
         }
