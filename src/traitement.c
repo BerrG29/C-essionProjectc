@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 
     // Lancement
 
-    
+    printf("ok avant avant début\n");
     //isCyclic(nbLigne, nbColonne, adr_server_odd, adr_server_pair);
 
     int compteur_cycle = 0;
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
     int stable = 0;
     int send = 0;
     int periode = 0;
-    cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+    send = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
     while(bool_fin!=1)
     {
         if(bool_visualisation==0)

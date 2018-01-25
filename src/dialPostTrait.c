@@ -12,7 +12,7 @@ void dialogue(int *bool_visu, int *index_iteration, int *nb_iteration, int *nb_t
 
 	if(*stable==1)
 	{
-		printf("La matrice est stable à l'iteration %d\n"*nb_total_iterations );
+		printf("La matrice est stable");
 	}
 
 	if(*periode!=0){
