@@ -15,8 +15,11 @@ int crypto(){
 
   char username[BUFSIZ],  password1[BUFSIZ],    /* Buffers for user input and comparison    */
        password2[BUFSIZ], *buf;
-  char filename[BUFSIZ]="../Documents/passwords.txt";                        /* Buffer for filename                      */
+  char filename[BUFSIZ]="./Documents/passwords.txt";                        /* Buffer for filename                      */
   FILE *outfile;                                /* File handle                              */
+
+
+  printf("INSERTION D'UN NOUVEL ADMINISTRATEUR : \n");
 
   /* Build salt */
   srand(time(NULL));
@@ -59,8 +62,7 @@ int crypto(){
 
     /* Print the record to the file */
     fprintf(outfile, "%s:%s\n", username, buf);
-
-  }  
-  fclose(outfile);
-
+    printf("Mot de passe enregistré\n");
+  } 
+  fclose(outfile); 
 }
