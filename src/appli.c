@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include "appli.h"
 
+const int nb_IP = 2;
+const int length_IP = 20;
+
 void printRes(char **matrix,int ligne,int colonne){
    //priting
    int i=0;
@@ -147,34 +150,47 @@ char **getRulesMatrix(char *nameFile, int *rLigne, int *rColonne){
 	return rules;
 }
 
+char **getConfFile(char *nameFile){
+	char **IPs = allouerMemoireMatrice(nb_IP,length_IP);
+	
+	
+	FILE *streamFile = NULL;
+	char *lineIP = NULL;
+
+	size_t len = 0;
+	size_t read;
+
+	int colonne = 0, ligne = 0;
+
+	streamFile = fopen(nameFile, "r");
+	if (streamFile == NULL){
+		printf("error to read provided file\n");
+		exit(EXIT_FAILURE);
+	}
+	while ((read = getline(&lineIP, &len, streamFile)) != -1) {
+			
+		colonne = 0;
+		while(colonne<read){
+			printf("%c",lineIP[colonne]);
+			if(lineIP[colonne] != '\n'){
+				IPs[ligne][colonne]=lineIP[colonne];	
+			}
+			colonne+=1;			
+		}
+		printf("\n");
+		ligne++;
+
+		// if(ligne == 0){
+		// 	strncat(IP1,IPs[ligne],colonne);
+		// } else if(ligne == 1){
+		// 	strncat(IP2,IPs[ligne],colonne);
+		// }
+
+		printf("Ligne %d, colonne %d\n",ligne,colonne);
+	}
+	free(lineIP);
+	fclose(streamFile);
 
 
-
-// int main(int argc, char *argv[])
-// {
-// 	printf("Getting rules\n");
-
-// 	char **mat = NULL;
-
-// 	int mLigne = 0, mColonne = 0;
-// 	int rLigne = 0, rColonne = 0;
-
-//     for (int i = 1; i < argc; i++) {	
-// 		if (!strncmp(argv[i], "-matrix", MAX_INPUT_BUFSIZE)) {
-// 			printf("Matrix : \n");
-// 			mat = getDataMatrix(argv[i+1],&mLigne,&mColonne);
-// 			printRes(mat,mLigne,mColonne);
-// 			printf("Matrix : \n");
-// 		}
-// 		if (!strncmp(argv[i], "-rules", MAX_INPUT_BUFSIZE)){
-// 			printf("Rules Matrix : \n");
-// 			mat = getRulesMatrix(argv[i+1],&rLigne,&rColonne);
-// 			printRes(mat,rLigne,rColonne);
-// 			printf("\n");
-// 		}
-//     }
-
-// 	printf("Matrice data ligne : %d, colonne : %d\n",mLigne,mColonne);
-// 	printf("Matrice rule ligne : %d, colonne : %d\n",rLigne,rColonne);
-//     return EXIT_SUCCESS;
-// }
+	return IPs;
+}

@@ -35,18 +35,14 @@ int main(int argc, char *argv[])
     int nb_iteration = 0;
 
     char *nameFile = nomSimulation();
-    printf("NOM SIMULATION : %s\n",nameFile);
 
     char adr_server_odd[64] = "localhost:5000/";
-    strcat(adr_server_odd,nameFile);
     char adr_server_pair[64] = "localhost:5001/";
-    strcat(adr_server_pair,nameFile);
-
-    printf("ADRESSE NOM SIMULATION : %s\n",adr_server_odd);
 
     char **matrice = NULL;
     char **matrice_tmp = NULL;
     char **regles = NULL;
+    char **IPs = NULL;
 
     int **matriceForRules = NULL;
     int **matriceForRulesToDisplay = NULL;
@@ -69,19 +65,26 @@ int main(int argc, char *argv[])
             }
 
         }
-            if (!strncmp(argv[i], "-conf", MAX_INPUT_BUFSIZE)) {
-            admin=1;
-                if(checkPass()==1){
-                    // TODO CHARGER LE FICHIER CONF ... 
-                    // SIMON ECRIT, NOUS ON RECUPERE LES NOUVELLES 
-                }
+        if (!strncmp(argv[i], "-conf", MAX_INPUT_BUFSIZE)) {
+            if(checkPass()==1){
+                IPs = getConfFile(argv[i+1]);
+                //getConfFile(argv[i+1]);
+                printf("Affichage IP\n");
+
+                strcpy(adr_server_odd,IPs[0]);
+                strcat(adr_server_odd,"/");
+                strcpy(adr_server_pair,IPs[1]);
+                strcat(adr_server_pair,"/");
+
+                printf("IP %s\n",adr_server_odd);
+                printf("IP %s\n",adr_server_pair);
+            }
         }
 		if (!strncmp(argv[i], "-matrix", MAX_INPUT_BUFSIZE)) {
 			printf("Matrix : \n");
 			matrice = getDataMatrix(argv[i+1],&nbLigne,&nbColonne);
 			printRes(matrice,nbLigne,nbColonne);
             matrice_tmp = copierMatrice(matrice,nbLigne,nbColonne);
-			printf("Matrix : \n");
 		}
 		if (!strncmp(argv[i], "-rules", MAX_INPUT_BUFSIZE)){
 			printf("Rules Matrix : \n");
@@ -92,6 +95,8 @@ int main(int argc, char *argv[])
     }
 
     if (!admin){
+        strcat(adr_server_odd,nameFile);
+        strcat(adr_server_pair,nameFile);
         if(!matrice){
             printf("Vous n'avez pas matrice de données ou elle n'est pas valide");
             exit(EXIT_FAILURE);
