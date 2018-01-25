@@ -109,13 +109,10 @@ int main(int argc, char *argv[])
     matriceForRulesToDisplay = initMatriceRegles(nbLigne,nbColonne);
 
     // Fin écriture
-
-    // Établissement règles
-
     //printRes(regles);
 
     // Initialisation des regles
-
+/*
     printf("\n#-----------------------#\n");
     printf("#   Récupération règles #\n");
     printf("#-----------------------#\n\n");
@@ -128,6 +125,27 @@ int main(int argc, char *argv[])
         }
         printf("\n");
     }
+*/
+/*    printf("Condition 1 : '%s'\n",regles[0]);
+    printf("Condition 1 - 2 : '%c'\n",regles[0][1]);*/
+
+    /*
+
+    int nbConditions = 3,nbCaracteres = 11;
+    regles = allouerMemoireMatrice(nbConditions,nbCaracteres);
+    regles[0] = "X-1O1O";  
+    regles[1] = "O=8X1X";
+    regles[2] = "A-1X1&-1O1X";
+
+	// regles[0] = "O-1/1A";  
+    // regles[1] = "A05O2O";
+    // regles[2] = "A+2A1$";
+
+	// regles[0] = "X+2A2O";  
+    // regles[1] = "O-3X1X";
+    // regles[2] = "A=3X1&-2O2X";
+
+    */
 
     printf("\n#-----------------------#\n");
     printf("#   Début traitement    #\n");
@@ -147,11 +165,12 @@ int main(int argc, char *argv[])
 
     // Lancement
 
-    //char *adr_server_odd = "148.60.220.134:5000/testReseau";
-    //char *adr_server_pair = "148.60.220.134:5001/testReseau";
+    
+    //isCyclic(nbLigne, nbColonne, adr_server_odd, adr_server_pair);
 
     int compteur_cycle = 0;
     int cyclic = 1000;
+    int stable;
     cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
     while(bool_fin!=1)
     {
@@ -159,6 +178,7 @@ int main(int argc, char *argv[])
         {
         	for(int f=0;f<nb_iteration;f++)
         	{
+                printf("\nNEVER\n");
         		iteration(matrice,matrice_tmp,matriceForRules,nbLigne,nbColonne,regles,nbRegles);
         		desallouerMemoireMatrice(matrice,nbLigne);
         		matrice = copierMatrice(matrice_tmp,nbLigne,nbColonne);
@@ -166,12 +186,14 @@ int main(int argc, char *argv[])
                 // printf("Display adresse matrice : %p\n",matrice);
                 // printf("Display adresse matrice temp : %p\n",matrice_tmp);
 
-                cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+
+                stable = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
                 /*    if(cyclic==0)
                 {
+                if(!stable) {
                     compteur_cycle++;
-                }*/
-
+                }
+                */
                 //affichage(nbLigne,nbColonne,matrice,matriceForRules);
 
                 /*   printf("cyclic %d\n", cyclic);
@@ -180,6 +202,10 @@ int main(int argc, char *argv[])
         		printf("\nTemps %d\n\n",f);*/
                 desallouerMemoireRegles(matriceForRulesToDisplay,nbLigne);
                 matriceForRulesToDisplay = copierMatriceRegles(matriceForRules,nbLigne,nbColonne);
+                printf("cyclic %d\n", cyclic);
+                // TODO ici network
+
+        		printf("\nTemps %d\n\n",f);
                 reinitMatriceReglesAZero(matriceForRules,nbLigne,nbColonne);
         	}
 
