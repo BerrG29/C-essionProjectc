@@ -201,6 +201,7 @@ int main(int argc, char *argv[])
         {
             if(bool_visualisation==0)
             {
+                nb_total_iterations+=nb_iteration;
                 for(int f=0;f<nb_iteration;f++)
                 {
                     printf("\nNEVER\n");
@@ -238,7 +239,6 @@ int main(int argc, char *argv[])
                     reinitMatriceReglesAZero(matriceForRules,nbLigne,nbColonne);
                 }
 
-                nb_total_iterations+=nb_iteration;
                 printf("Affichage matrice de l'itération %d\n\n\n\n",nb_total_iterations);
                 // for(int i = 0;i< nbLigne;i++)
                 // {
