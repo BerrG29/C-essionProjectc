@@ -17,7 +17,6 @@
 #include "rulesDef.c"
 #include "client.h"
 #include "dialPostTrait.h"
-#include "constantes.h"
 #include "echequier.h"
 #include "couleur.h"
 
@@ -32,8 +31,15 @@ int main(int argc, char *argv[])
     int nb_total_iterations = 0;
     int nb_iteration = 0;
 
-    char *adr_server_odd = "localhost:5000/simulation";
-    char *adr_server_pair = "localhost:5001/simulation";
+    char *nameFile = nomSimulation();
+    printf("NOM SIMULATION : %s\n",nameFile);
+
+    char adr_server_odd[64] = "localhost:5000/";
+    strcat(adr_server_odd,nameFile);
+    char adr_server_pair[64] = "localhost:5001/";
+    strcat(adr_server_pair,nameFile);
+
+    printf("ADRESSE NOM SIMULATION : %s\n",adr_server_odd);
 
     char **matrice = NULL;
     char **matrice_tmp = NULL;
