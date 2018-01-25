@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
                            "Options:\n"
                            "    -h, --help, Print this help\n"
                            "    -p, --port, Give the listening port to use\n"
-                           "    -o, --odd,  Set the default port [yes][no]\n"
+                           "    -o, --odd,  Set the server in odd line mode [yes][no]\n"
             );
             return EXIT_SUCCESS;
         } else {

@@ -187,12 +187,15 @@ int main(int argc, char *argv[])
 
         // Lancement
 
+
         
         //isCyclic(nbLigne, nbColonne, adr_server_odd, adr_server_pair);
 
         int compteur_cycle = 0;
-        int cyclic = 1000;
-        int stable;
+        int cyclic = -1;
+        int stable = 0;
+        int send = 0;
+        int periode = 0;
         cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
         while(bool_fin!=1)
         {
@@ -209,13 +212,17 @@ int main(int argc, char *argv[])
                     // printf("Display adresse matrice temp : %p\n",matrice_tmp);
 
 
-                    stable = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
-                    /*    if(cyclic==0)
-                    {
-                    if(!stable) {
+                    send = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+
+                    stable = matrix_is_stable(adr_server_odd, adr_server_pair);
+                    cyclic = matrix_is_cyclic(adr_server_odd, adr_server_pair);
+
+                    if(stable==0) {
                         compteur_cycle++;
                     }
-                    */
+                    if(cyclic!=-1){
+                        periode = nb_total_iterations - cyclic;
+                    }
                     //affichage(nbLigne,nbColonne,matrice,matriceForRules);
 
                     /*   printf("cyclic %d\n", cyclic);
@@ -251,7 +258,7 @@ int main(int argc, char *argv[])
                 //TODO affichage matrice de l'itération index_iteration
             printf("affichage de la matrice de l'itération %d\n",index_iteration);
             }
-            dialogue(&bool_visualisation,&index_iteration,&nb_iteration,&nb_total_iterations,&bool_fin);
+           dialogue(&bool_visualisation,&index_iteration,&nb_iteration,&nb_total_iterations,&bool_fin,&stable,&periode);
         }
 
         printf("\n#-----------------------#\n");

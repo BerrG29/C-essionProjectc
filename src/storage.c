@@ -83,10 +83,20 @@ int isStable(char *path, int isOdd) {
     size_t read;
 
     char *content = malloc(sizeof(char) * MAX_BUFSIZE);
-    char *content2 = malloc(sizeof(char) * MAX_BUFSIZE);
-    if(!content || !content2) {
+    if(!content) {
+        free(_path);
+        fclose(fo);
         return EXIT_FAILURE;
     }
+
+    char *content2 = malloc(sizeof(char) * MAX_BUFSIZE);
+    if(!content2) {
+        free(content);
+        free(_path);
+        fclose(fo);
+        return EXIT_FAILURE;
+    }
+
     strcpy(content, "");
     strcpy(content2, "");
     int counter = 0; // to check if it's the next table
@@ -145,6 +155,7 @@ static char *compare(char *path, char *content, int n) {
             counter++;
         } else {
             if (counter == 2) {
+                // printf("%d\n%d\n%d\n%s\n%s\n", n, iteration_number, strcmp(data,content), data, content);
                 if (n != iteration_number && !strcmp(data, content)) {
                     char tmp[5] = {'\0',};
                     sprintf(tmp, "%d_", iteration_number);
@@ -181,6 +192,8 @@ char *isCyclic(char *path, int isOdd) {
     size_t read;
     char *content = malloc(sizeof(char) * MAX_BUFSIZE);
     if(!content) {
+        free(_path);
+        fclose(fo);
         return EXIT_FAILURE;
     }
     strcpy(content, "");
@@ -199,7 +212,10 @@ char *isCyclic(char *path, int isOdd) {
         }
     }
 
-    char *res = compare(_path, content, iteration_number);
+    char *res = NULL;
+    if (iteration_number > 1) {
+        res = compare(_path, content, iteration_number);
+    }
     free(line);
     fclose(fo);
     free(_path);
@@ -217,11 +233,14 @@ char *readFile(char *path, int n, int isOdd) {
     FILE *fo;
     fo = fopen(_path, "r");
     if(!fo) {
+        free(_path);
         return NULL;
     }
 
     char *content = malloc(sizeof(char) * MAX_BUFSIZE);
     if (!content) {
+        fclose(fo);
+        free(_path);
         return NULL;
     }
 
