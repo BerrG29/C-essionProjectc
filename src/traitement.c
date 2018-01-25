@@ -25,15 +25,12 @@ const int MAX_INPUT_BUFSIZE=256;
 
 int main(int argc, char *argv[])
 {
-    //int nbLigne = 4, nbColonne = 4; // Pour la matrice de test du sujet
-    int nbLigne = 0, nbColonne = 0; 
-
     // Variables interraction utilisateur post traitement
     int bool_visualisation = 0;
     int bool_fin = 0;
     int index_iteration = 0;
     int nb_total_iterations = 0;
-    int nb_iteration = 1;
+    int nb_iteration = 0;
 
     char *adr_server_odd = "localhost:5000/simulation";
     char *adr_server_pair = "localhost:5001/simulation";
@@ -45,7 +42,7 @@ int main(int argc, char *argv[])
     int **matriceForRules = NULL;
     int **matriceForRulesToDisplay = NULL;
 
-    int mLigne = 0, mColonne = 0;
+    int nbLigne = 0, nbColonne = 0;
 	int nbRegles = 0, rColonne = 0;
 
     for (int i = 1; i < argc; i++) {
@@ -90,17 +87,18 @@ int main(int argc, char *argv[])
     if(!regles || !matrice){
         printf("Vous n'avez pas rentrée de règles");
         exit(EXIT_FAILURE);
+    } else if(nb_iteration == 0){
+        //TODO : Intégrer la partie avec l'entrée d'iterations
+        char term;
+        printf("Combien d'iteration souhaitez vous pour commencer?\n");     
+        while(scanf("%d%c", &nb_iteration, &term) != 2 ){
+            printf("Merci d'entrer un entier.\n");        
+            printf("Combien d'iteration souhaitez vous pour commencer?\n");
+            scanf(" %c",&term);
+        }
     }
 
-    // TODO : Intégrer la partie avec l'entrée d'iterations
-    // int nbIter;
-    // char term;
-    // printf("Combien d'iteration souhaitez vous pour commencer?\n");     
-    // while(scanf("%d%c", &nbIter, &term) != 2 ){
-    //     printf("Merci d'entrer un entier.\n");        
-    //     printf("Combien d'iteration souhaitez vous pour commencer?\n");
-    //     scanf(" %c",&term);
-    // }
+    
     // TRAITEMENT 
 
     // Écriture 
@@ -122,8 +120,6 @@ int main(int argc, char *argv[])
     printf("#   Récupération règles #\n");
     printf("#-----------------------#\n\n");
 
-
-    // regles = rules(&nbRegles,&nb_iteration);
     printf("Nombre de regles %d\n",nbRegles);
     for(int i = 0; i < nbRegles ; i ++){
         printf("Regle %d = ",i);
@@ -132,25 +128,6 @@ int main(int argc, char *argv[])
         }
         printf("\n");
     }
-
-/*    printf("Condition 1 : '%s'\n",regles[0]);
-    printf("Condition 1 - 2 : '%c'\n",regles[0][1]);*/
-
-
-   /* int nbConditions = 3,nbCaracteres = 11;
-    regles = allouerMemoireMatrice(nbConditions,nbCaracteres);
-    regles[0] = "X-1O1O";  
-    regles[1] = "O=8X1X";
-    regles[2] = "A-1X1&-1O1X";*/
-
-	// regles[0] = "O-1/1A";  
-    // regles[1] = "A05O2O";
-    // regles[2] = "A+2A1$";
-
-	// regles[0] = "X+2A2O";  
-    // regles[1] = "O-3X1X";
-    // regles[2] = "A=3X1&-2O2X";
-
 
     printf("\n#-----------------------#\n");
     printf("#   Début traitement    #\n");
@@ -168,21 +145,14 @@ int main(int argc, char *argv[])
         printf("\n");
     }
 
-
-    // for(int l = 0 ; l < strlen(regles) ; l++){
-    //     printf("Regle[%d] = %s\n",l,regles[l]);
-    // }
-    // int premiere_condi;
-    // int deuxieme_condi;
-
-		// Lancement
+    // Lancement
 
     //char *adr_server_odd = "148.60.220.134:5000/testReseau";
     //char *adr_server_pair = "148.60.220.134:5001/testReseau";
 
-    //send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
     int compteur_cycle = 0;
     int cyclic = 1000;
+    cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
     while(bool_fin!=1)
     {
         if(bool_visualisation==0)
@@ -196,7 +166,7 @@ int main(int argc, char *argv[])
                 // printf("Display adresse matrice : %p\n",matrice);
                 // printf("Display adresse matrice temp : %p\n",matrice_tmp);
 
-               // int cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+                cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
                 /*    if(cyclic==0)
                 {
                     compteur_cycle++;
