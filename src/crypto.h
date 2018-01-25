@@ -1,0 +1,6 @@
+#ifndef C_ESSIONPROJECTC_CRYPTO_H
+#define C_ESSIONPROJECTC_CRYPTO_H
+
+int crypto();
+
+#endif //C_ESSIONPROJECTC_CRYPTO_H

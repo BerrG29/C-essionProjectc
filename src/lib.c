@@ -173,6 +173,18 @@ int **initMatriceRegles(int nbLig,int nbCol){
     return mat;
 }
 
+int **copierMatriceRegles(int **matrice,int nbLig, int nbCol){
+    int **mat = allouerMemoireMatrice(nbLig,nbCol);
+
+    for(int i = 0 ; i < nbLig ; i++){
+        for(int j = 0 ; j < nbCol ; j++){
+            mat[i][j] = matrice[i][j];
+        }
+    }
+
+    return mat;
+}
+
 void reinitMatriceReglesAZero(int **matriceRules, int nbLig, int nbCol){
     for(int i=0; i<nbLig;i++){
         for(int j=0;j<nbCol; j++){

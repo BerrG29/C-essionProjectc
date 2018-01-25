@@ -27,7 +27,8 @@ char **rules(int *nbRules, int *nb_iteration) {
    
    //demande du nombre d'itération
    printf("Combien d'itération voulez-vous lancer la première fois ? (entrez 1 entier)\n");
-	while(valid!=1){
+	while(valid!=1)
+	{
 		if(scanf("%d%c", nb_iteration, &termi) == 2 && nb_iteration > 0)
 		{
 			valid = 1;
@@ -88,7 +89,8 @@ char **rules(int *nbRules, int *nb_iteration) {
 	 }
 	 printf("nombre de condition est de %d\n",nbConditions );
 
-	if(nbConditions > 1){
+	if(nbConditions > 1)
+	{
 		rules[ligne] = (char *)realloc(rules[ligne],minimumValueInRule + nbCaseForEachCondition * nbConditions * sizeof(char));
 		if(!rules || !rules[ligne]){
 			for(int i =0;i<*nbRules;i++){
@@ -170,22 +172,6 @@ char **rules(int *nbRules, int *nb_iteration) {
    //rules[ligne][colonne]='\n';
 
    return rules; 
-}
-
-void printRes(char **rules){
-   //priting
-   int i=0;
-   int j=0;
- 
-   while(rules[i][j]!='\n') {
-        while(rules[i][j]!='\n') {
-			printf("%c ", rules[i][j]);
-			j++;
-        }
-		printf("\n");
-		i++;
-		j=0;
-    }
 }
 
 
