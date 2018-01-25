@@ -10,9 +10,11 @@ int checkPass(){
   char username[BUFSIZ], *password;  /* User input buffers         */
   char buf[BUFSIZ];                  /* File input buffer          */
   char *user_file, *pass_file;       /* Buffers for values in file */
-  char filename[BUFSIZ]="../Documents/passwords.txt";             /* Filename buffer            */
+  char filename[BUFSIZ]="./Documents/passwords.txt";             /* Filename buffer            */
   FILE *infile;                      /* File handle                */
   int res=0;
+  
+  printf("AUTHENTIFICATION : \n");
 
   /* Get the username from the user */
   printf("Username: ");
@@ -24,38 +26,31 @@ int checkPass(){
   /* Open the file */
   if((infile = fopen(filename, "r")) == NULL){
 
-    printf("\nFile error!\nAborting...\n");
+    printf("\nFile error!\nPlease init the pass file\n");
 
   } else {
 
-  /* Loop throught the file */
+  // lecture du fichier
   while (!feof(infile)) {
 
-      /* Initialize with empty string */
       buf[0] = '\0';
 
-      /* Read in one line */
       fscanf(infile, "%s", buf);
 
-      /* If it's an empty line, continue */
       if(strlen(buf) == 0) continue;
 
-      /* Point to the buffer */
       user_file = buf;
 
-      /* Point to the delimiter in the buffer */
       pass_file = strchr(buf, ':');
 
-      /* Change the delimiter to a nul character */
       pass_file[0] = '\0';
 
-      /* Move to the next character */
       pass_file++;
 
-      /* See if this matches the name the user entered */
+      // regarder si le nom d'utilisateur
       if(strcmp(user_file, username) == 0){
 
-        /* See if the passwords match */
+        // regarder si le mot de pass match
         if(strcmp(crypt(password, pass_file), pass_file) == 0){
 
           printf("Correct password...\n");
@@ -67,15 +62,14 @@ int checkPass(){
 
         }
         break;
-
-      } else {
-	  printf("Invalid user or password!\n");
       } 
-
     }
-  }
 
-  /* Close the file */
-  fclose(infile);
+    if(strcmp(user_file, username) != 0){
+	printf("Invalid user or password!\n");
+    }
+    /* Close the file */
+    fclose(infile);
+  }
   return res;
 }

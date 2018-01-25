@@ -1,5 +1,4 @@
-#include <time.h>
-#include "constantes.h"
+
 
 const int PARAMETRES_DANS_CONDITIONS = 4;
 
