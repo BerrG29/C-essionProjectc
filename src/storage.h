@@ -19,12 +19,21 @@
 int writeFile(char *path, char *data, int is_odd);
 
 /**
- *
- * @param path
+ * Function to check if the simulation reach a stable state or not
+ * @param path file concerned
  * @param is_odd 1 if the server saved the odd lines, else 0
- * @return 100 if isCyclic, 101 else. Return EXIT_FAILURE if an error happened
+ * @return 1 if it's stable, else return 0
  */
-int isCyclic(char *path, int is_odd);
+int isStable(char *path, int is_odd);
+
+/**
+ * Function to check if the last element in the stable equaled another save
+ * @param path file concerned
+ * @param isOdd 1 if the server saved the odd lines, else 0
+ * @return return -1 if it hasn't got any cycle else return every iteration numbers equaled
+ */
+char *isCyclic(char *path, int isOdd);
+
 /**
  *
  * @param path file concerned
