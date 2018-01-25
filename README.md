@@ -1,8 +1,10 @@
 # C-essionProjectc
 
-Etape 1 : générer l'application à l'aide de la commande "make" dans le répertoire "C-essionPc". 
+Etape 1 : Après avoir cloné le dépôt, lancer la commande `git submodule update --init --recursive`. 
 
-Etape 2 : lancer l'application. 2 choix s'offre alors à vous:
+Etape 2 : générer l'application à l'aide de la commande "make" dans le répertoire "C-essionPc". 
+
+Etape 3 : lancer l'application. 2 choix s'offre alors à vous:
 - Lancement en tant qu'administrateur vous avez le choix entre 2 commandes :
  
     1) ./bin/traitement -admin : celle-ci permet de renseigner le nom d'utilisateur et le mot de passe d'un administrateur. Cette         commande est accessible sans droit à la première utilisation. Après la première utilisation, vous devrez disposer de droits         pour lancer cette commande.
