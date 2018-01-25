@@ -36,7 +36,12 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
     }
 }
 
-char *client_get(char *url) {
+/**
+ * Function to get a table saved on the remote server
+ * @param url url of the remote server
+ * @return
+ */
+static char *client_get(char *url) {
     struct mg_mgr mgr;
     mg_mgr_init(&mgr, NULL);
     s_exit_flag = 0;
@@ -58,7 +63,13 @@ char *client_get(char *url) {
     return res;
 }
 
-char *client_post(char *url, char *data) {
+/**
+ * Function to save a new table
+ * @param url url of the remote server
+ * @param data table to save
+ * @return
+ */
+static char *client_post(char *url, char *data) {
     struct mg_mgr mgr;
     mg_mgr_init(&mgr, NULL);
     s_exit_flag = 0;
@@ -81,49 +92,93 @@ char *client_post(char *url, char *data) {
     result = NULL;
     return res;
 }
+/*
+int isCyclic(int line_len, int column_len, char *adr_server_odd, char *adr_server_pair) {
 
-int isCyclic(char *adr_server_odd, char *adr_server_pair) {
-
-    char *m_odd = client_get(adr_server_odd);
-    if (!m_odd) {
+    int max_len = 128;
+    char *tmpUrl = malloc(sizeof(char) * max_len);
+    if(!tmpUrl) {
         return -1;
     }
 
-    char *m_pair = client_get(adr_server_pair);
+    // Get the information saved on the odd remote server
+    strcpy(tmpUrl, "");
+    snprintf(tmpUrl, max_len, "%s?-1", adr_server_odd);
+    char *m_odd = client_get(tmpUrl);
+    if (!m_odd) {
+        free(tmpUrl);
+        return -1;
+    }
+
+    // Get the information saved on the pair remote server
+    strcpy(tmpUrl, "");
+    snprintf(tmpUrl, max_len, "%s?-1", adr_server_pair);
+    char *m_pair = client_get(tmpUrl);
     if (!m_pair) {
+        free(tmpUrl);
         free(m_odd);
         return -1;
     }
 
-
-    return -1;
-char *matrix_is_stable(char *adr_server_odd, char *adr_server_pair) {
-
-    char url[MAX_BUFSIZE] = {'\0',};
-    snprintf(url, "%s/stable", adr_server_odd);
-    int a = client_get(url);
-    snprintf(url, "%s/stable", adr_server_pair);
-    int b = client_get(url);
-
-    if (a && b) {
-        return 1;
+    // Init array
+    char array[MAX_BUFSIZE][column_len];
+    for (int i = 0; i < MAX_BUFSIZE; i++) {
+        for (int j = 0; j < column_len; j++) {
+            array[i][j] = '\0';
+        }
     }
 
-    return 0;
-}
+    // Copied the pair lines in Array
+    const char s[2] = "\n";
+    char *token_odd;
+    char *token_pair;
+    token_pair = strtok(m_pair, s);
+    int line_number = 0;
+    while( token_pair != NULL  ) {
 
-char *get_matrix_n_iteration(char *adr_server_odd, char *adr_server_pair, int n) {
+        for (int i = 0; i < column_len; i++) {
+            array[line_number][i] = token_pair[i];
+        }
+        line_number += 2;
+        token_pair = strtok(NULL, s);
+    }
 
-    char *stable_url = "";
-    char url[MAX_BUFSIZE] = {'\0',};
-    snprintf(url, "%s?%d", adr_server_odd, n);
-    char *m_odd= client_get(url);
-    snprintf(url, "%s?%d", adr_server_pair, n);
-    char *m_pair= client_get(url);
+    // Copied the odd lines in Array
+    line_number = 1;
+    token_odd = strtok(m_odd, s);
+    while( token_odd != NULL  ) {
+        for (int i = 0; i < column_len; i++) {
+            array[line_number][i] = token_odd[i];
+        }
+        line_number += 2;
+        token_odd = strtok(NULL, s);
+    }
 
-    // TODO Assembled the odd and pair lines to make one matrix
-    return NULL;
-}
+    for (int i = 0; i < MAX_BUFSIZE; i++) {
+        if (array[i][0] == '\0') {
+            i = MAX_BUFSIZE;
+        } else {
+            for (int j = 0; j < column_len; j++) {
+                printf("%c", array[i][j]);
+            }
+            printf("\n");
+        }
+    }
+
+    char current[line_len][column_len] = {'\0',};
+    char next[line_len][column_len] = {'\0',};
+    for (int i = 0; i < column_len; i++){
+        for (int j = 0;j < line_len; j++){
+
+        }
+    }
+
+    free(tmpUrl);
+    free(m_odd);
+    free(m_pair);
+    return -1;
+})
+*/
 
 // TODO Add a matrix to copy the rules
 int send_matrix(int line_len, int column_len, char **matrix, char *adr_server_odd, char *adr_server_pair) {
@@ -168,40 +223,87 @@ int send_matrix(int line_len, int column_len, char **matrix, char *adr_server_od
 
     return 0;
 }
-/*
-int main(int argc, char *argv[]) {
 
-    int x = 5;
-    int y = 5;
-    int counter = 0;
-    char data[5][5] = {0,};
-    for (int i = 0 ; i < x; i++) {
-        for (int j = 0; j < y; j++) {
-            data[i][j] = 0x41 + counter;
-            counter++;
+char **get_matrix_n_iteration(char *adr_server_odd, char *adr_server_pair, int n) {
+
+    char *stable_url = "";
+    char url[MAX_BUFSIZE] = {'\0',};
+    sprintf(url, "%s?%d", adr_server_odd, n);
+    char *m_odd= client_get(url);
+    sprintf(url, "%s?%d", adr_server_pair, n);
+    char *m_pair= client_get(url);
+
+    // TODO Assembled the odd and pair lines to make one matrix
+    return NULL;
+}
+
+int matrix_is_stable(char *adr_server_odd, char *adr_server_pair) {
+
+    char url[MAX_BUFSIZE] = {'\0',};
+    char *stable = "/stable";
+    sprintf(url, "%s%s", adr_server_odd, stable);
+    int a = client_get(url);
+    sprintf(url, "%s%s", adr_server_pair, stable);
+    int b = client_get(url);
+
+    if (a && b) {
+        return 1;
+    }
+
+    return 0;
+}
+
+int matrix_is_cyclic(char *adr_server_odd, char *adr_server_pair) {
+
+    char url[MAX_BUFSIZE];
+    char *cylic = "/cyclic";
+    sprintf(url, "%s%s", adr_server_odd, cylic);
+    char *iterations_odd = client_get(url);
+    sprintf(url, "%s%s", adr_server_pair, cylic);
+    char *iterations_pair = client_get(url);
+
+    if (!strcmp(iterations_odd, "-1") || !strcmp(iterations_odd, "-1")) {
+        return -1;
+    }
+
+    int *odd = malloc(sizeof(int));
+    int *pair = malloc(sizeof(int));
+
+    const char s[2] = "_";
+    int i_odd = 0;
+    char *token = strtok(iterations_odd, s);
+    while (token != NULL) {
+        odd = (int*)realloc(odd, (sizeof(int) * (i_odd + 1)));
+        odd[i_odd] = atoi(token);
+        i_odd++;
+        token = strtok(NULL, s);
+    }
+
+    int i_pair = 0;
+    token = strtok(iterations_pair, s);
+    while (token) {
+        pair = (int*)realloc(pair, sizeof(int) * (i_pair + 1));
+        pair[i_pair] = atoi(token);
+        i_pair++;
+        token = strtok(NULL, s);
+    }
+
+    printf("ODD:\n");
+    for (int i = 0; i < i_odd; i++) {
+        printf("%d ", odd[i]);
+    }
+    printf("\n");
+    printf("PAIRE:\n");
+    for (int j = 0; j < i_pair; j++) {
+        printf("%d ", pair[j]);
+    }
+    printf("\n");
+        for (int i = 0; i < i_odd; i++) {
+        for (int j = 0; j < i_pair; j++) {
+            if (odd[i] == pair[j])
+                return odd[i];
         }
     }
-    char *tmp = array2DtoArray(x, y, data);
-    char *res2 = client_post(argv[1], tmp);
 
-    if (res2) {
-        printf("%s\n", res2);
-    } else {
-        printf("No results\n");
-    }
-    free(res2);
-*/
-/*
-printf("-------\n");
-char *res = client_get(argv[1]);
-if (res) {
-    printf("%s", res);
-} else {
-    printf("No results\n");
+    return -1;
 }
-free(res);
-
-return 0;
-}
-
- */
