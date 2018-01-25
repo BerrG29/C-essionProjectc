@@ -4,19 +4,20 @@
 #include <ctype.h>
 #include <stdint.h>
 
-void dialogue(int *bool_visu, int *index_iteration, int *nb_iteration, int *nb_total, int *bool_fin){
+void dialogue(int *bool_visu, int *index_iteration, int *nb_iteration, int *nb_total, int *bool_fin, int *stable, int *periode){
 
 	char ok = "";
 	char term = "";
 	int valid = 0;
 
-	/*if(*nb_cycles==*nb_total_iterations)
+	if(*stable==1)
 	{
-		printf("Aucune stabilité\n" );
+		printf("La matrice est stable à l'iteration %d\n"*nb_total_iterations );
 	}
-	else{
-		printf("La matrice devient stable à la %d itération \n",*nb_cycles);
-	}*/
+
+	if(*periode!=0){
+		printf("la matrice est cyclique de periode %d\n", *periode);
+	}
 	printf("Voulez vous visualiser une itération particulière (O/N)?\n");
 	scanf(" %c%c", &ok, &term);
 	valid = 0;
@@ -41,7 +42,7 @@ void dialogue(int *bool_visu, int *index_iteration, int *nb_iteration, int *nb_t
 		printf("Quelle itération voulez vous visualiser ? entier entre (0 et %d)\n",*nb_total);
 
 		while(valid!=1){
-			if(scanf("%d%c", index_iteration, &term) == 2 && index_iteration > *nb_total)
+			if(scanf("%d%c", index_iteration, &term) == 2 && *index_iteration > *nb_total)
 			{
 				valid = 1;
 			}

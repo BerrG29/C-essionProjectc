@@ -175,8 +175,10 @@ int main(int argc, char *argv[])
     //isCyclic(nbLigne, nbColonne, adr_server_odd, adr_server_pair);
 
     int compteur_cycle = 0;
-    int cyclic = 1000;
-    int stable;
+    int cyclic = -1;
+    int stable = 0;
+    int send = 0;
+    int periode = 0;
     cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
     while(bool_fin!=1)
     {
@@ -188,18 +190,17 @@ int main(int argc, char *argv[])
         		iteration(matrice,matrice_tmp,matriceForRules,nbLigne,nbColonne,regles,nbRegles);
         		desallouerMemoireMatrice(matrice,nbLigne);
         		matrice = copierMatrice(matrice_tmp,nbLigne,nbColonne);
+                send = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+                stable = matrix_is_stable(adr_server_odd, adr_server_pair);
+                cyclic = matrix_is_cyclic(adr_server_odd, adr_server_pair);
 
-                // printf("Display adresse matrice : %p\n",matrice);
-                // printf("Display adresse matrice temp : %p\n",matrice_tmp);
-
-
-                stable = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
-                /*    if(cyclic==0)
-                {
-                if(!stable) {
+                if(stable==0) {
                     compteur_cycle++;
                 }
-                */
+                if(cyclic!=-1){
+                    periode = nb_total_iterations - cyclic;
+                }
+                
                 //affichage(nbLigne,nbColonne,matrice,matriceForRules);
 
                 /*   printf("cyclic %d\n", cyclic);
@@ -235,7 +236,7 @@ int main(int argc, char *argv[])
             //TODO affichage matrice de l'itération index_iteration
            printf("affichage de la matrice de l'itération %d\n",index_iteration);
         }
-        dialogue(&bool_visualisation,&index_iteration,&nb_iteration,&nb_total_iterations,&bool_fin);
+        dialogue(&bool_visualisation,&index_iteration,&nb_iteration,&nb_total_iterations,&bool_fin,&stable,&periode);
     }
 
     printf("\n#-----------------------#\n");
