@@ -10,6 +10,8 @@
 
 #define MAX_INPUT_BUFSIZE 256
 #define DEFAULT_PORT "5000"
+#define API_STABLE "/stable"
+#define API_CYCLIC "/cyclic"
 
 static const char *GET = "GET";
 static const char *POST = "POST";
@@ -22,6 +24,12 @@ static void mg_printf_OK(struct mg_connection *nc, char *data) {
                       "Content-Type: text/plain\r\n"
                       "Content-Length: %d\r\n\r\n%s",
               (int) strlen(data), data);
+}
+
+static void mg_printf_created(struct mg_connection *nc) {
+    mg_printf(nc,
+              "HTTP/1.1 201 Created\r\n"
+                      "Content-Length: 0\r\n\r\n");
 }
 
 static void mg_printf_not_implemented(struct mg_connection *nc) {
@@ -69,13 +77,34 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
             if (!query) {
                 mg_printf_not_found(nc);
             } else {
-                int n = atoi(query);
-                char *res = readFile(uri, n, is_odd);
-                if (res) {
-                    mg_printf_OK(nc, res);
-                    free(res);
+                const char *symbol = '/';
+                char *ret = strrchr(uri, symbol);
+                if (!strncmp(ret, API_STABLE, strlen(API_STABLE))) {
+                    char *path = strndup(uri, strlen(uri) - strlen(ret));
+                    int stable = isStable(path, is_odd);
+                    char tmp[2];
+                    sprintf(tmp, "%d", stable);
+                    mg_printf_OK(nc, tmp);
+                    free(path);
+                } else if (!strncmp(ret, API_CYCLIC, strlen(API_CYCLIC))) {
+                    char *path = strndup(uri, strlen(uri) - strlen(ret));
+                    char *cyclic = isCyclic(path, is_odd);
+                    if (cyclic) {
+                        mg_printf_OK(nc, cyclic);
+                        free(cyclic);
+                    } else {
+                        mg_printf_OK(nc, "-1");
+                    }
+                    free(path);
                 } else {
-                    mg_printf_not_found(nc);
+                    int n = atoi(query);
+                    char *res = readFile(uri, n, is_odd);
+                    if (res) {
+                        mg_printf_OK(nc, res);
+                        free(res);
+                    } else {
+                        mg_printf_not_found(nc);
+                    }
                 }
             }
         } else if (!strncmp(hm->method.p, POST, strlen(POST))) {
@@ -87,12 +116,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
                 mg_printf_not_found(nc);
             } else {
                 writeFile(uri, query, is_odd);
-                int stable = isStable(uri, is_odd);
-                char *cyclic = isCyclic(uri, is_odd, n);
-                printf("%s\n", cyclic);
-                char tmp[2];
-                sprintf(tmp, "%d", stable);
-                mg_printf_OK(nc, tmp);
+                mg_printf_created(nc);
                 free(query);
             }
         } else {

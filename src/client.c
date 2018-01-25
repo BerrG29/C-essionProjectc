@@ -97,10 +97,31 @@ int isCyclic(char *adr_server_odd, char *adr_server_pair) {
 
 
     return -1;
+char *matrix_is_stable(char *adr_server_odd, char *adr_server_pair) {
+
+    char url[MAX_BUFSIZE] = {'\0',};
+    snprintf(url, "%s/stable", adr_server_odd);
+    int a = client_get(url);
+    snprintf(url, "%s/stable", adr_server_pair);
+    int b = client_get(url);
+
+    if (a && b) {
+        return 1;
+    }
+
+    return 0;
 }
 
-char *get_matrix_n_iteration(char *adr_server_odd, char *adr_server_pair) {
+char *get_matrix_n_iteration(char *adr_server_odd, char *adr_server_pair, int n) {
 
+    char *stable_url = "";
+    char url[MAX_BUFSIZE] = {'\0',};
+    snprintf(url, "%s?%d", adr_server_odd, n);
+    char *m_odd= client_get(url);
+    snprintf(url, "%s?%d", adr_server_pair, n);
+    char *m_pair= client_get(url);
+
+    // TODO Assembled the odd and pair lines to make one matrix
     return NULL;
 }
 

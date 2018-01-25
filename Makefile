@@ -21,13 +21,11 @@ mongoose:
 network:
 	$(CC) $(STD) -c ./src/storage.c -o ./bin/storage.o $(CFLAGS) 
 	$(CC) $(STD) -c ./src/client.c -o ./bin/client.o $(CFLAGS) ./bin/mongoose.o
-	$(CC) $(STD) -o ./bin/lineModule ./src/lineModule.c $(CFLAGS) ./bin/*.o
+	$(CC) $(STD) -o ./bin/lineModule ./src/lineModule.c $(CFLAGS) ./bin/mongoose.o ./bin/storage.o
 
 traitement:
 	$(CC) --std=c99 -c ./src/dialPostTrait.c -o ./bin/dialPostTrait.o $(CFLAGS)
-	#$(CC) --std=c99 $(CFLAGS) $(ALLFLAGS) ./src/traitement.c -o ./bin/traitement ./bin/client.o ./bin/mongoose.o ./bin/dialPostTrait.o
-	#$(CC) --std=c99 $(CFLAGS) $(ALLFLAGS) ./src/traitement.c -o ./bin/traitement ./bin/dialPostTrait.o ./bin/appli.o ./bin/checkPass.o ./bin/crypto.o ./bin/client.o ./bin/mongoose.o ./bin/checkPass.o ./bin/crypto.o
-	$(CC) $(STD) $(CFLAGS) $(ALLFLAGS) ./src/traitement.c -o ./bin/traitement ./bin/dialPostTrait.o ./bin/appli.o ./bin/checkPass.o ./bin/crypto.o -lcrypt ./bin/couleur.o ./bin/echequier.o
+	$(CC) $(STD) $(CFLAGS) $(ALLFLAGS) ./src/traitement.c -o ./bin/traitement ./bin/mongoose.o ./bin/client.o ./bin/dialPostTrait.o ./bin/appli.o ./bin/checkPass.o ./bin/crypto.o ./bin/couleur.o ./bin/echequier.o -lcrypt
 
 clean:
 	$(RM) ./bin/*

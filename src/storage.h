@@ -26,7 +26,13 @@ int writeFile(char *path, char *data, int is_odd);
  */
 int isStable(char *path, int is_odd);
 
-char *isCyclic(char *path, int isOdd, int current_iteration);
+/**
+ * Function to check if the last element in the stable equaled another save
+ * @param path file concerned
+ * @param isOdd 1 if the server saved the odd lines, else 0
+ * @return return -1 if it hasn't got any cycle else return every iteration numbers equaled
+ */
+char *isCyclic(char *path, int isOdd);
 
 /**
  *

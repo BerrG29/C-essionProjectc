@@ -105,13 +105,13 @@ int isStable(char *path, int isOdd) {
     free(line);
     fclose(fo);
     free(_path);
-    int res =strcmp(content, content2);
+    int res = strcmp(content, content2);
     free(content);
     free(content2);
     if (!res) {
-        return 0;
+        return 1;
     }
-    return 1;
+    return 0;
 }
 
 static char *compare(char *path, char *content, int n) {
@@ -145,12 +145,10 @@ static char *compare(char *path, char *content, int n) {
             counter++;
         } else {
             if (counter == 2) {
-                printf("%d\n%d\n%d\n%s\n%s\n", n, iteration_number, strcmp(data,content), data, content);
                 if (n != iteration_number && !strcmp(data, content)) {
                     char tmp[5] = {'\0',};
                     sprintf(tmp, "%d_", iteration_number);
-                    printf("iteration number: %d\n");
-                    strcat(res, tmp);
+                    strncat(res, tmp, strlen(tmp));
                 }
                 counter = 0;
                 iteration_number++;
@@ -165,7 +163,7 @@ static char *compare(char *path, char *content, int n) {
     return res;
 }
 
-char *isCyclic(char *path, int isOdd, int current_iteration) {
+char *isCyclic(char *path, int isOdd) {
 
     char *_path = init_path(path, isOdd);
     if (!_path) {
@@ -201,9 +199,7 @@ char *isCyclic(char *path, int isOdd, int current_iteration) {
         }
     }
 
-    printf("content:\n%s\niteration_number:%d\n", content, iteration_number);
     char *res = compare(_path, content, iteration_number);
-
     free(line);
     fclose(fo);
     free(_path);
