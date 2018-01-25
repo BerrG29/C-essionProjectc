@@ -92,93 +92,6 @@ static char *client_post(char *url, char *data) {
     result = NULL;
     return res;
 }
-/*
-int isCyclic(int line_len, int column_len, char *adr_server_odd, char *adr_server_pair) {
-
-    int max_len = 128;
-    char *tmpUrl = malloc(sizeof(char) * max_len);
-    if(!tmpUrl) {
-        return -1;
-    }
-
-    // Get the information saved on the odd remote server
-    strcpy(tmpUrl, "");
-    snprintf(tmpUrl, max_len, "%s?-1", adr_server_odd);
-    char *m_odd = client_get(tmpUrl);
-    if (!m_odd) {
-        free(tmpUrl);
-        return -1;
-    }
-
-    // Get the information saved on the pair remote server
-    strcpy(tmpUrl, "");
-    snprintf(tmpUrl, max_len, "%s?-1", adr_server_pair);
-    char *m_pair = client_get(tmpUrl);
-    if (!m_pair) {
-        free(tmpUrl);
-        free(m_odd);
-        return -1;
-    }
-
-    // Init array
-    char array[MAX_BUFSIZE][column_len];
-    for (int i = 0; i < MAX_BUFSIZE; i++) {
-        for (int j = 0; j < column_len; j++) {
-            array[i][j] = '\0';
-        }
-    }
-
-    // Copied the pair lines in Array
-    const char s[2] = "\n";
-    char *token_odd;
-    char *token_pair;
-    token_pair = strtok(m_pair, s);
-    int line_number = 0;
-    while( token_pair != NULL  ) {
-
-        for (int i = 0; i < column_len; i++) {
-            array[line_number][i] = token_pair[i];
-        }
-        line_number += 2;
-        token_pair = strtok(NULL, s);
-    }
-
-    // Copied the odd lines in Array
-    line_number = 1;
-    token_odd = strtok(m_odd, s);
-    while( token_odd != NULL  ) {
-        for (int i = 0; i < column_len; i++) {
-            array[line_number][i] = token_odd[i];
-        }
-        line_number += 2;
-        token_odd = strtok(NULL, s);
-    }
-
-    for (int i = 0; i < MAX_BUFSIZE; i++) {
-        if (array[i][0] == '\0') {
-            i = MAX_BUFSIZE;
-        } else {
-            for (int j = 0; j < column_len; j++) {
-                printf("%c", array[i][j]);
-            }
-            printf("\n");
-        }
-    }
-
-    char current[line_len][column_len] = {'\0',};
-    char next[line_len][column_len] = {'\0',};
-    for (int i = 0; i < column_len; i++){
-        for (int j = 0;j < line_len; j++){
-
-        }
-    }
-
-    free(tmpUrl);
-    free(m_odd);
-    free(m_pair);
-    return -1;
-})
-*/
 
 // TODO Add a matrix to copy the rules
 int send_matrix(int line_len, int column_len, char **matrix, char *adr_server_odd, char *adr_server_pair) {
@@ -288,17 +201,7 @@ int matrix_is_cyclic(char *adr_server_odd, char *adr_server_pair) {
         token = strtok(NULL, s);
     }
 
-    printf("ODD:\n");
     for (int i = 0; i < i_odd; i++) {
-        printf("%d ", odd[i]);
-    }
-    printf("\n");
-    printf("PAIRE:\n");
-    for (int j = 0; j < i_pair; j++) {
-        printf("%d ", pair[j]);
-    }
-    printf("\n");
-        for (int i = 0; i < i_odd; i++) {
         for (int j = 0; j < i_pair; j++) {
             if (odd[i] == pair[j])
                 return odd[i];

@@ -19,11 +19,6 @@ char **rules(int *nbRules, int *nb_iteration) {
    char **rules = NULL; 
    int valid=0;
    char termi;
-    // for (int i = 0 ; i < 100 ; i++)
-    // {
-    //     rules[i] = (char *) malloc(sizeof(char)*100);
-    // }
-	// J'ai déplacé ce bloc dans "Combien de conditions ?".
    
    //demande du nombre d'itération
    printf("Combien d'itération voulez-vous lancer la première fois ? (entrez 1 entier)\n");

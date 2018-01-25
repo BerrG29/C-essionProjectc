@@ -121,10 +121,16 @@ char **getRulesMatrix(char *nameFile, int *rLigne, int *rColonne){
 
 		colonne=0;
 		rules[ligne]=(char *) malloc(sizeof(char)*read);
+		printf("Regle %d : ",ligne);
 		while(colonne<read){
-			rules[ligne][colonne]=lineRulesMatrix[colonne];
+			printf("%c",lineRulesMatrix[colonne]);
+			if(lineRulesMatrix[colonne] != '\n'){
+				rules[ligne][colonne]=lineRulesMatrix[colonne];	
+			}
+			printf("%c",rules[ligne][colonne]);
 			colonne+=1;			
 		}
+		printf("\n");
 		ligne++;
 	}
 	free(lineRulesMatrix);

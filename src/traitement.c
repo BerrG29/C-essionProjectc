@@ -17,7 +17,6 @@
 #include "rulesDef.c"
 #include "client.h"
 #include "dialPostTrait.h"
-#include "constantes.h"
 #include "echequier.h"
 #include "couleur.h"
 
@@ -25,18 +24,22 @@ const int MAX_INPUT_BUFSIZE=256;
 
 int main(int argc, char *argv[])
 {
-    //int nbLigne = 4, nbColonne = 4; // Pour la matrice de test du sujet
-    int nbLigne = 0, nbColonne = 0; 
-
     // Variables interraction utilisateur post traitement
     int bool_visualisation = 0;
     int bool_fin = 0;
     int index_iteration = 0;
     int nb_total_iterations = 0;
-    int nb_iteration = 1;
+    int nb_iteration = 0;
 
-    char *adr_server_odd = "localhost:5000/simulation";
-    char *adr_server_pair = "localhost:5001/simulation";
+    char *nameFile = nomSimulation();
+    printf("NOM SIMULATION : %s\n",nameFile);
+
+    char adr_server_odd[64] = "localhost:5000/";
+    strcat(adr_server_odd,nameFile);
+    char adr_server_pair[64] = "localhost:5001/";
+    strcat(adr_server_pair,nameFile);
+
+    printf("ADRESSE NOM SIMULATION : %s\n",adr_server_odd);
 
     char **matrice = NULL;
     char **matrice_tmp = NULL;
@@ -45,7 +48,7 @@ int main(int argc, char *argv[])
     int **matriceForRules = NULL;
     int **matriceForRulesToDisplay = NULL;
 
-    int mLigne = 0, mColonne = 0;
+    int nbLigne = 0, nbColonne = 0;
 	int nbRegles = 0, rColonne = 0;
 
     for (int i = 1; i < argc; i++) {
@@ -90,17 +93,18 @@ int main(int argc, char *argv[])
     if(!regles || !matrice){
         printf("Vous n'avez pas rentrée de règles");
         exit(EXIT_FAILURE);
+    } else if(nb_iteration == 0){
+        //TODO : Intégrer la partie avec l'entrée d'iterations
+        char term;
+        printf("Combien d'iteration souhaitez vous pour commencer?\n");     
+        while(scanf("%d%c", &nb_iteration, &term) != 2 ){
+            printf("Merci d'entrer un entier.\n");        
+            printf("Combien d'iteration souhaitez vous pour commencer?\n");
+            scanf(" %c",&term);
+        }
     }
 
-    // TODO : Intégrer la partie avec l'entrée d'iterations
-    // int nbIter;
-    // char term;
-    // printf("Combien d'iteration souhaitez vous pour commencer?\n");     
-    // while(scanf("%d%c", &nbIter, &term) != 2 ){
-    //     printf("Merci d'entrer un entier.\n");        
-    //     printf("Combien d'iteration souhaitez vous pour commencer?\n");
-    //     scanf(" %c",&term);
-    // }
+    
     // TRAITEMENT 
 
     // Écriture 
@@ -119,8 +123,6 @@ int main(int argc, char *argv[])
     printf("#   Récupération règles #\n");
     printf("#-----------------------#\n\n");
 
-
-    // regles = rules(&nbRegles,&nb_iteration);
     printf("Nombre de regles %d\n",nbRegles);
     for(int i = 0; i < nbRegles ; i ++){
         printf("Regle %d = ",i);
@@ -133,6 +135,7 @@ int main(int argc, char *argv[])
 /*    printf("Condition 1 : '%s'\n",regles[0]);
     printf("Condition 1 - 2 : '%c'\n",regles[0][1]);*/
 
+    /*
 
     int nbConditions = 3,nbCaracteres = 11;
     regles = allouerMemoireMatrice(nbConditions,nbCaracteres);
@@ -148,6 +151,7 @@ int main(int argc, char *argv[])
     // regles[1] = "O-3X1X";
     // regles[2] = "A=3X1&-2O2X";
 
+    */
 
     printf("\n#-----------------------#\n");
     printf("#   Début traitement    #\n");
@@ -165,20 +169,15 @@ int main(int argc, char *argv[])
         printf("\n");
     }
 
+    // Lancement
 
-    // for(int l = 0 ; l < strlen(regles) ; l++){
-    //     printf("Regle[%d] = %s\n",l,regles[l]);
-    // }
-    // int premiere_condi;
-    // int deuxieme_condi;
-
-		// Lancement
-
-    send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+    
     //isCyclic(nbLigne, nbColonne, adr_server_odd, adr_server_pair);
 
     int compteur_cycle = 0;
     int cyclic = 1000;
+    int stable;
+    cyclic = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
     while(bool_fin!=1)
     {
         if(bool_visualisation==0)
@@ -193,11 +192,14 @@ int main(int argc, char *argv[])
                 // printf("Display adresse matrice : %p\n",matrice);
                 // printf("Display adresse matrice temp : %p\n",matrice_tmp);
 
-                int stable = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+
+                stable = send_matrix(nbLigne, nbColonne, matrice, adr_server_odd, adr_server_pair);
+                /*    if(cyclic==0)
+                {
                 if(!stable) {
                     compteur_cycle++;
                 }
-
+                */
                 //affichage(nbLigne,nbColonne,matrice,matriceForRules);
 
                 /*   printf("cyclic %d\n", cyclic);

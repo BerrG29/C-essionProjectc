@@ -1,3 +1,6 @@
+#include <time.h>
+#include "constantes.h"
+
 const int PARAMETRES_DANS_CONDITIONS = 4;
 
 /**
@@ -491,4 +494,15 @@ void iteration(char** matriceDeDonnees, char** matriceTemp, int** matriceRules, 
         }
         printf("\n");
     }*/
+}
+
+/**
+ * Récupération d'un nom en fonction du temps
+ */
+char* nomSimulation(){
+    time_t now = time (NULL);
+    struct tm tm_now = *localtime (&now);
+    strftime (s_now, sizeof s_now, "%d-%m-%Y-%H-%M-%S", &tm_now);
+	strcat(simulation, s_now);
+    return simulation;
 }
